@@ -1,0 +1,153 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-glow: var(--primary-glow);
+  --color-primary-deep: var(--primary-deep);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-dark: var(--dark);
+  --color-dark-soft: var(--dark-soft);
+  --color-cream: var(--cream);
+  --color-brand-red: var(--brand-red);
+  --color-brand-red-hover: var(--brand-red-hover);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-offwhite: var(--brand-offwhite);
+  --color-brand-teal: var(--brand-teal);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --font-sans: "Cairo", "Tajawal", system-ui, sans-serif;
+  --font-display: "Cairo", "Tajawal", system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: regular;
+  src: url("assets/fonts/DINNextLTArabic-Regular.woff2") format("woff2"),
+       url("assets/fonts/DINNextLTArabic-Regular.ttf") format("truetype");
+  font-display: swap;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: medium;
+  src: url("assets/fonts/DINNextLTArabic-Medium.woff2") format("woff2"),
+       url("assets/fonts/DINNextLTArabic-Medium.ttf") format("truetype");
+  font-display: swap;
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: bold;
+  src: url("assets/fonts/DINNextLTArabic-Bold.woff2") format("woff2"),
+       url("assets/fonts/DINNextLTArabic-Bold.ttf") format("truetype");
+  font-display: swap;
+  font-weight: normal;
+}
+
+.regular { font-family: "regular"; }
+.medium { font-family: "medium"; }
+.bold { font-family: "bold"; }
+
+:root {
+  --radius: 0.75rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    direction: rtl;
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: "regular", var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+  .bg-gradient-guarantee {
+    background: var(--gradient-guarantee);
+  }
+  .bg-primary-deep {
+    background-color: var(--primary-deep);
+  }
+  .text-primary-deep {
+    color: var(--primary-deep);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  .animate-float-slow {
+    animation: float-slow 4s ease-in-out infinite;
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 60%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 20px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
+  }
+  .animate-pulse-ring {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+.fancybox-open .swiper {
+  pointer-events: none;
+}
