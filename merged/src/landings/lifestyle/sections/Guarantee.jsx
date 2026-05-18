@@ -28,7 +28,7 @@ export default function Guarantee() {
               className="mx-auto w-24 h-24 md:w-40 md:h-40 object-contain mb-6 drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]"
               loading="lazy"
             />
-            <h3 className="font-black text-white text-3xl md:text-5xl leading-tight mb-4">
+            <h3 className="bold text-white text-3xl md:text-5xl leading-tight mb-4">
               ضمان الفورمة
             </h3>
             <p className="text-white/95 text-lg md:text-2xl bold leading-relaxed mb-8">

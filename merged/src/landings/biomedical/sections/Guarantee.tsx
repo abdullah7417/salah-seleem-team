@@ -10,7 +10,7 @@ export const Guarantee = memo(function Guarantee() {
           <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center text-[60px]" aria-hidden="true">
             🛡️
           </div>
-          <h2 className="text-[28px] font-black mb-4" id="guarantee-heading">ضمان الفورمة</h2>
+          <h2 className="text-[28px] bold mb-4" id="guarantee-heading">ضمان الفورمة</h2>
           <p className="text-[16px] bold leading-[1.7] max-w-[400px] mx-auto mb-6">
             لو مالحظتش أي تطور في جسمك وصحتك بعد الالتزام الكامل بالبرامج لمدة 3
             شهور، هنرجعلك كامل الاشتراك

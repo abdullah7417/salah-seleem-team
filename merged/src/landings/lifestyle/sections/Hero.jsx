@@ -63,7 +63,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-black text-white leading-[1.25] text-[2.6rem] sm:text-5xl max-w-[20ch]"
+            className="bold text-white leading-[1.25] text-[2.6rem] sm:text-5xl max-w-[20ch]"
           >
             هتوصل للفورمة في <span className="text-primary">90 يوم</span> بس من غير مكملات وبأكل
             عادي من البيت
@@ -164,7 +164,7 @@ export default function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-black text-white leading-[1.3] text-5xl xl:text-6xl"
+              className="bold text-white leading-[1.3] text-5xl xl:text-6xl"
             >
               هتوصل للفورمة في 90 يوم بس من غير مكملات وبأكل عادي من البيت
             </motion.h1>

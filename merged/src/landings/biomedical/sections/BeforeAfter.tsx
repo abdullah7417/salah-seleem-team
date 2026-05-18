@@ -130,10 +130,10 @@ export const BeforeAfter = memo(function BeforeAfter() {
       aria-labelledby="beforeafter-heading"
     >
       <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <p className="text-center text-[34px] md:text-[46px] font-black text-text-primary leading-[1.25] tracking-tight mb-2" id="beforeafter-heading">
+        <p className="text-center text-[34px] md:text-[46px] bold text-text-primary leading-[1.25] tracking-tight mb-2" id="beforeafter-heading">
           النتايج الحقيقية
         </p>
-        <h2 className="text-center text-base md:text-xl font-semibold leading-[1.5] text-text-secondary mb-6 tracking-normal">أرقام — مش وعود</h2>
+        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-text-secondary mb-6 tracking-normal">أرقام — مش وعود</h2>
         <p className="text-[14px] mb-4 text-center text-gray-500">
           كل تحول فيه اسم العميل، سنه، حالته الطبية، والنتيجة بالأرقام.
         </p>

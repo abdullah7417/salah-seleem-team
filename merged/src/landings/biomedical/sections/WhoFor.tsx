@@ -12,8 +12,8 @@ export const WhoFor = memo(function WhoFor() {
   return (
     <section className="bg-brand-offwhite px-5 py-10" aria-labelledby="whofor-heading">
       <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <p className="text-center text-[34px] md:text-[46px] font-black text-text-primary leading-[1.25] tracking-tight mb-2" id="whofor-heading">ازاي تتأكد إن الخدمة مناسبة ليك؟</p>
-        <h2 className="text-center text-base md:text-xl font-semibold leading-[1.5] text-text-secondary mb-6 tracking-normal">SST مناسب ليك لو:</h2>
+        <p className="text-center text-[34px] md:text-[46px] bold text-text-primary leading-[1.25] tracking-tight mb-2" id="whofor-heading">ازاي تتأكد إن الخدمة مناسبة ليك؟</p>
+        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-text-secondary mb-6 tracking-normal">SST مناسب ليك لو:</h2>
 
         <ul className="space-y-2.5">
           {whoForItems.map((t: any, i: number) => (

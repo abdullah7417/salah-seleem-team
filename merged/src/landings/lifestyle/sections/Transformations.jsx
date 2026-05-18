@@ -44,7 +44,7 @@ function Card({ t }) {
         <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-white/70" />
       </div>
       <div className="p-5 text-right flex-1 flex flex-col">
-        <h4 className="font-black text-dark text-lg md:text-xl leading-tight mb-2">{t.result}</h4>
+        <h4 className="bold text-dark text-lg md:text-xl leading-tight mb-2">{t.result}</h4>
         <div className="mt-auto">
           <div className="text-primary bold">
             {t.name} - {t.age} سنة
@@ -80,7 +80,7 @@ export default function Transformations() {
     <section className="py-16 md:py-24 bg-background">
       <Container>
         <div className="text-center pb-10 md:pb-14 max-w-4xl mx-auto">
-          <h2 className="font-black text-primary text-3xl sm:text-4xl md:text-5xl mb-4">
+          <h2 className="bold text-primary text-3xl sm:text-4xl md:text-5xl mb-4">
             التحول الحقيقي
           </h2>
           <h3 className="bold text-dark text-lg sm:text-xl md:text-2xl leading-[1.8]">

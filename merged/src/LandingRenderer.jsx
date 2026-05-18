@@ -77,7 +77,7 @@ export default function LandingRenderer({ slug }) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4" dir="rtl">
         <div className="max-w-md text-center">
-          <h1 className="text-7xl font-black text-primary">404</h1>
+          <h1 className="text-7xl bold text-primary">404</h1>
           <h2 className="mt-4 text-xl font-semibold text-foreground">الصفحة مش موجودة</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             الصفحة اللي بتدور عليها مش موجودة أو اتنقلت.

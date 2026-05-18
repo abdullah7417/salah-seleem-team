@@ -21,8 +21,8 @@ export default function Navbar() {
     >
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
         <a href="#top" className="flex items-center gap-2">
-          <span className="text-white font-black text-xl md:text-2xl tracking-tight">SST</span>
-          <span className="w-9 h-9 rounded-lg bg-white grid place-items-center text-primary font-black">S</span>
+          <span className="text-white bold text-xl md:text-2xl tracking-tight">SST</span>
+          <span className="w-9 h-9 rounded-lg bg-white grid place-items-center text-primary bold">S</span>
         </a>
         <div className="hidden md:flex items-center gap-8 text-white/80 text-sm font-medium">
           <a href="#videos" className="hover:text-primary transition">التحولات</a>

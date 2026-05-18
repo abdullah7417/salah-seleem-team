@@ -14,7 +14,7 @@ export default function SectionTitle({ eyebrow, title, subtitle, light = false, 
           {eyebrow}
         </span>
       )}
-      <h2 className={`text-3xl md:text-5xl font-black leading-tight ${light ? "text-white" : "text-foreground"}`}>
+      <h2 className={`text-3xl md:text-5xl bold leading-tight ${light ? "text-white" : "text-foreground"}`}>
         {title}
       </h2>
       {subtitle && (

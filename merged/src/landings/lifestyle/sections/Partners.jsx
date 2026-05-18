@@ -19,7 +19,7 @@ export default function Partners() {
   return (
     <section id="partner" className="py-16 md:py-24 bg-background">
       <Container>
-        <h3 className="text-center text-2xl md:text-4xl font-black text-dark mb-10 md:mb-14">
+        <h3 className="text-center text-2xl md:text-4xl bold text-dark mb-10 md:mb-14">
           فخورون بكل شركائنا
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 md:gap-10 items-center justify-items-center">

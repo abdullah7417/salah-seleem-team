@@ -21,7 +21,7 @@ function Column({ items, type }) {
       <div className={`inline-block text-sm bold px-4 py-1.5 rounded-full mb-5 ${isGood ? "bg-primary text-white" : "bg-destructive/10 text-destructive"}`}>
         {isGood ? "✓ معانا" : "✗ لوحدك"}
       </div>
-      <h3 className={`text-2xl md:text-3xl font-black mb-6 ${isGood ? "text-white" : "text-dark"}`}>
+      <h3 className={`text-2xl md:text-3xl bold mb-6 ${isGood ? "text-white" : "text-dark"}`}>
         {isGood ? "مع تحدي الـ 90 يوم" : "من غير البرنامج"}
       </h3>
       <ul className="space-y-4">

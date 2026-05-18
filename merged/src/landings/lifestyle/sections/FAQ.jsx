@@ -20,10 +20,10 @@ function Item({ q, a, open, onClick }) {
         onClick={onClick}
         className="w-full flex items-center  gap-4 py-6 text-right group"
       >
-        <span className="shrink-0 text-white w-6 h-6 grid place-items-center text-2xl leading-none font-light select-none">
+        <span className="shrink-0 text-white w-6 h-6 grid place-items-center text-2xl leading-none font-light select-none cursor-pointer">
           {open ? "−" : "+"}
         </span>
-        <span className="bold text-white text-base md:text-[17px] leading-[1.8] group-hover:text-primary transition-colors">
+        <span className="bold text-white text-base md:text-[17px] leading-[1.8] group-hover:text-primary transition-colors cursor-pointer">
           {q}
         </span>
       </button>
@@ -60,7 +60,7 @@ export default function FAQ() {
       <Container>
         <div className="max-w-6xl mx-auto">
           <div className="text-center pb-12 md:pb-16">
-            <h2 className="font-black text-white text-2xl md:text-3xl lg:text-[38px] leading-[1.7]">
+            <h2 className="bold text-white text-2xl md:text-3xl lg:text-[38px] leading-[1.7]">
               لو عندك سؤال غير الأسئلة الموجودة، ممكن تتواصل
               <br className="hidden md:block" /> معانا من خلال{" "}
               <a

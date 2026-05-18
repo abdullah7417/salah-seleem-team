@@ -169,6 +169,9 @@ export function Hero() {
   }, [fancyboxBound]);
 
   const r = heroReviews[idx];
+  useEffect(() => {
+  console.log("API Data:", apiData);
+}, [apiData]);
 
   return (
     <section

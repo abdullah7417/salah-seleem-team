@@ -25,7 +25,7 @@ export default function TransformationVideos() {
     <section className="py-16 md:py-24 bg-background">
       <Container>
         <div className="text-center pb-10 md:pb-12">
-          <h2 className="font-black text-dark text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-[1.5]">
+          <h2 className="bold text-dark text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-[1.5]">
             أبطال زيك قدروا يعملوا فورمة من غير مكملات ولا 7 أيام تمرين متواصل
           </h2>
         </div>

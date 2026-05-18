@@ -20,8 +20,8 @@ export const FAQ = memo(function FAQ() {
   return (
     <section className="bg-white px-5 py-8" aria-labelledby="faq-heading">
       <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <p className="text-center text-[34px] md:text-[46px] font-black text-text-primary leading-[1.25] tracking-tight mb-2" id="faq-heading">أسئلة شايعة</p>
-        <h2 className="text-center text-base md:text-xl font-semibold leading-[1.5] text-text-secondary tracking-normal mb-4">أي سؤال في دماغك هتلاقيه هنا</h2>
+        <p className="text-center text-[34px] md:text-[46px] bold text-text-primary leading-[1.25] tracking-tight mb-2" id="faq-heading">أسئلة شايعة</p>
+        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-text-secondary tracking-normal mb-4">أي سؤال في دماغك هتلاقيه هنا</h2>
 
         <div>
           {faqs.map((f: any, i: number) => {

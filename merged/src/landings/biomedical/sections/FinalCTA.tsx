@@ -7,10 +7,10 @@ export const FinalCTA = memo(function FinalCTA() {
         <div className="mb-4 inline-block rounded-full px-3.5 py-1 text-[11px] bold text-white bg-[rgba(255,255,255,0.12)] border border-[rgba(255,255,255,0.2)]">
           العرض ده لفترة محدودة
         </div>
-        <h2 className="text-[22px] font-black text-white leading-[1.35] mb-1" id="finalcta-heading">
+        <h2 className="text-[22px] bold text-white leading-[1.35] mb-1" id="finalcta-heading">
           +25,000 شخص غيروا حياتهم.
         </h2>
-        <h3 className="text-[22px] font-black leading-[1.35] mb-3 text-brand-red">
+        <h3 className="text-[22px] bold leading-[1.35] mb-3 text-brand-red">
           إنت الجاي.
         </h3>
         <p className="text-[14px] mb-6 text-[rgba(255,255,255,0.65)]">

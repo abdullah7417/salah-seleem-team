@@ -31,7 +31,7 @@ export default function Pricing() {
     <section id="join" className="py-16 md:py-24 bg-background">
       <Container>
         <div className="text-center pb-8 md:pb-10">
-          <h2 className="font-black text-primary text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          <h2 className="bold text-primary text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
             تحدي الــ 90 يوم
           </h2>
         </div>
@@ -64,10 +64,10 @@ export default function Pricing() {
 
             {/* Title + price + CTA */}
             <div className="border-b border-black/15 pb-6 text-center">
-              <h4 className="font-black text-black text-3xl md:text-4xl mb-3">تحدي الــ 90 يوم</h4>
+              <h4 className="bold text-black text-3xl md:text-4xl mb-3">تحدي الــ 90 يوم</h4>
 
               <div className="flex items-center justify-center gap-2 flex-wrap mb-3">
-                <span className="font-black text-primary text-4xl md:text-5xl leading-none">
+                <span className="bold text-primary text-4xl md:text-5xl leading-none">
                   بـ {plan.price}
                 </span>
                 <span className="text-black bold text-sm md:text-[17px] pr-1">

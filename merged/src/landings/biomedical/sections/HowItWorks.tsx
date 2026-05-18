@@ -22,10 +22,10 @@ export const HowItWorks = memo(function HowItWorks() {
   return (
     <section className="bg-brand-dark px-5 py-10" aria-labelledby="howitworks-heading">
       <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <p className="text-center text-[34px] md:text-[46px] font-black text-[rgba(255,255,255,0.5)] leading-[1.25] tracking-tight mb-2" id="howitworks-heading">
+        <p className="text-center text-[34px] md:text-[46px] bold text-[rgba(255,255,255,0.5)] leading-[1.25] tracking-tight mb-2" id="howitworks-heading">
           ايه اللي بيحصل بعد الاشتراك بالخطوات؟
         </p>
-        <h2 className="text-center text-base md:text-xl font-semibold leading-[1.5] text-white tracking-normal">من أول يوم لحد ما تعمل فورمة</h2>
+        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-white tracking-normal">من أول يوم لحد ما تعمل فورمة</h2>
 
         <ol className="mt-2">
           {howItWorksSteps.map((s: any, i: number) => (
@@ -37,7 +37,7 @@ export const HowItWorks = memo(function HowItWorks() {
               )}
             >
               <div
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[13px] font-black bg-[rgba(230,51,18,0.12)] border-2 border-brand-red text-brand-red"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[13px] bold bg-[rgba(230,51,18,0.12)] border-2 border-brand-red text-brand-red"
                 aria-hidden="true"
               >
                 {String(i + 1).padStart(2, "0")}

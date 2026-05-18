@@ -40,8 +40,8 @@ export const Pricing = memo(function Pricing() {
   return (
     <section id="pricing" className="px-5 py-8 scroll-mt-16 bg-brand-offwhite" aria-labelledby="pricing-heading">
       <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <p className="text-center text-[34px] md:text-[46px] font-black text-text-primary leading-[1.25] tracking-tight mb-2" id="pricing-heading">تحدي الـــ 90 يوم</p>
-        <h2 className="text-center text-base md:text-xl font-semibold leading-[1.5] text-text-secondary tracking-normal">اختار الباقة المناسبة ليك</h2>
+        <p className="text-center text-[34px] md:text-[46px] bold text-text-primary leading-[1.25] tracking-tight mb-2" id="pricing-heading">تحدي الـــ 90 يوم</p>
+        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-text-secondary tracking-normal">اختار الباقة المناسبة ليك</h2>
 
         <div className="flex flex-col gap-2 mb-4" role="radiogroup" aria-label="اختر الباقة">
           {pricingOptions.map((o: any) => {
