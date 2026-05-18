@@ -1,0 +1,576 @@
+##
+## ============================================================
+## UI REGISTRY — v1.0.0
+## ============================================================
+## PURPOSE:
+##   Single source of truth for all UI components in the SST Landings project.
+##   Every component used in any landing MUST be registered here.
+##
+## HOW TO USE:
+##   - Developers: check here before building anything new
+##   - AI: map master-template.yaml sections → section_registry.<key>
+##   - Design: component keys are the contract between design and dev
+##
+## CROSS-REFERENCES:
+##   golden-reference.md  ← UI standards that govern this registry
+##     Rule 3.1 → section layouts
+##     Rule 3.2 → visual hierarchy
+##     Rule 3.3 → CTA standards
+##   master-template.yaml ← consumes this registry
+##     sections[]          → section_registry.<key>
+##     layout.*            → layout_components.<key>
+##
+## ADDING A NEW COMPONENT:
+##   1. Add it to the correct registry section below
+##   2. Fill ALL required fields (mark optional fields with ~)
+##   3. Add to changelog at the bottom
+##   4. Reference it in the relevant master-template.yaml
+## ============================================================
+##
+
+schema_version: "2.0.0"
+
+registry:
+  key: "ui-registry"
+  title: "SST Landings UI Registry"
+  version: "1.0.0"
+  status: "active"
+  owner: "SST Team"
+  golden_reference_version: "1.0.0"
+  last_updated: "2026-05-18"
+
+# ─────────────────────────────────────────────
+# DESIGN SYSTEM GLOBALS
+# ─────────────────────────────────────────────
+design_system:
+  framework: "React 19 + Tailwind CSS 4 + Framer Motion"
+  css_framework: "Tailwind CSS 4"
+  animation_library: "Framer Motion"
+  carousel_library: "Swiper"
+  modal_library: "@fancyapps/ui (Fancybox)"
+  icon_library: "lucide-react + react-icons"
+  direction_support:
+    rtl: true
+    ltr: false
+  theme_mode_support:
+    light: true
+    dark: false
+  grid_system: "Tailwind CSS grid (12-col concept)"
+  container_max_width: "max-w-7xl (80rem / 1280px)"
+  container_padding: "px-4 sm:px-6 lg:px-8"
+  font_families:
+    - class: "regular"
+      family: "DIN Next LT Arabic Regular"
+      fallback: "Cairo, Tajawal, system-ui, sans-serif"
+    - class: "medium"
+      family: "DIN Next LT Arabic Medium"
+      fallback: "Cairo, Tajawal, system-ui, sans-serif"
+    - class: "bold"
+      family: "DIN Next LT Arabic Bold"
+      fallback: "Cairo, Tajawal, system-ui, sans-serif"
+  responsive_breakpoints:
+    sm: 640px
+    md: 768px
+    lg: 1024px
+    xl: 1280px
+
+# ─────────────────────────────────────────────
+# CORE RENDERING COMPONENTS
+# Governs: LandingRenderer, route, providers
+# Golden Reference: Rule 2.1
+# ─────────────────────────────────────────────
+core_components:
+
+  landing_renderer:
+    component: "LandingRenderer"
+    file: "src/LandingRenderer.jsx"
+    purpose: "Main renderer — resolves config, applies theme, fetches API data, renders sections in order"
+    props:
+      required:
+        - slug: "string — landing URL slug"
+    consumes:
+      - "getLandingConfig(slug) from src/config/landings.js"
+      - "ThemeProvider from src/providers/ThemeProvider.jsx"
+      - "LandingDataProvider from src/context/LandingDataContext.jsx"
+      - "useLandingApi from src/hooks/useLandingApi.js"
+    renders:
+      - "DynamicSection for each section in config.sections[]"
+      - "Layout components (Footer, WhatsApp) if enabled"
+
+  dynamic_section:
+    component: "DynamicSection"
+    file: "src/LandingRenderer.jsx"
+    purpose: "Wraps each section in Suspense with SectionSkeleton fallback"
+    props:
+      required:
+        - component: "React.LazyExoticComponent"
+
+  slug_route:
+    component: "SlugRoute"
+    file: "src/routes/$slug.tsx"
+    purpose: "TanStack Router route — sets meta tags, renders LandingRenderer"
+    integration: "TanStack Router createFileRoute"
+
+# ─────────────────────────────────────────────
+# PROVIDERS & HOOKS
+# ─────────────────────────────────────────────
+providers:
+
+  theme_provider:
+    component: "ThemeProvider"
+    file: "src/providers/ThemeProvider.jsx"
+    purpose: "Applies theme CSS variables to document root"
+    props:
+      required:
+        - themeKey: "string — matches key in src/themes/"
+      optional: []
+    exports:
+      - "ThemeProvider (component)"
+      - "useTheme (hook)"
+
+  landing_data_provider:
+    component: "LandingDataProvider"
+    file: "src/context/LandingDataContext.jsx"
+    purpose: "Provides API response data to all child sections via context"
+    props:
+      required:
+        - value: "object — API response data"
+    exports:
+      - "LandingDataProvider (component)"
+      - "useLandingData (hook)"
+
+hooks:
+
+  use_landing_api:
+    file: "src/hooks/useLandingApi.js"
+    purpose: "Fetches landing data from backend API"
+    params:
+      - apiEndpoint: "string"
+      - apiKey: "string"
+    returns:
+      data: "object | null"
+      loading: "boolean"
+      error: "string | null"
+
+  use_fancybox:
+    file: "src/hooks/useFancybox.ts"
+    purpose: "Lazy-loads and initializes Fancybox on elements matching selector"
+    params:
+      - selector: "string"
+      - options: "Fancybox options object"
+    returns:
+      ref: "React.RefObject — attach to container element"
+
+  use_mobile:
+    file: "src/hooks/use-mobile.tsx"
+    purpose: "Detects mobile viewport"
+    returns:
+      isMobile: "boolean"
+
+# ─────────────────────────────────────────────
+# SHARED COMMON COMPONENTS
+# Governs: src/components/common/
+# Golden Reference: Rule 8.1
+# ─────────────────────────────────────────────
+common_components:
+
+  container:
+    component: "Container"
+    file: "src/components/common/Container.jsx"
+    purpose: "Max-width centered content wrapper"
+    props:
+      required:
+        - children: "ReactNode"
+      optional:
+        - className: "string"
+    css: "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8"
+    used_in: ["all sections"]
+
+  cta_button:
+    component: "CTAButton"
+    file: "src/components/common/CTAButton.jsx"
+    purpose: "Reusable call-to-action button with variants and motion"
+    props:
+      required:
+        - children: "ReactNode"
+      optional:
+        - variant: "'primary' | 'dark' | 'outline' | 'white' (default: 'primary')"
+        - size: "'md' | 'lg' | 'xl' (default: 'lg')"
+        - as: "'a' | 'button' (default: 'a')"
+        - href: "string (default: '#pricing')"
+        - className: "string"
+    variants:
+      primary: "bg-primary text-white shadow-glow hover:bg-primary-deep"
+      dark: "bg-dark text-white hover:bg-dark-soft"
+      outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white"
+      white: "bg-white text-dark hover:bg-white/95 shadow-card"
+    sizes:
+      md: "px-6 py-3 text-sm"
+      lg: "px-8 py-4 text-base md:text-lg"
+      xl: "px-10 py-5 text-lg md:text-xl"
+    motion: "whileHover y:-2, hover:scale-[1.03] active:scale-[0.98]"
+    used_in: ["Hero", "Pricing", "CTABanner", "FinalCTA", "Guarantee"]
+
+  section_title:
+    component: "SectionTitle"
+    file: "src/components/common/SectionTitle.jsx"
+    purpose: "Section heading with eyebrow, title, and subtitle"
+    props:
+      required:
+        - title: "string"
+      optional:
+        - eyebrow: "string"
+        - subtitle: "string"
+        - light: "boolean (default: false) — white text for dark backgrounds"
+        - center: "boolean (default: true)"
+    animation: "fadeInUp whileInView, once, margin -80px, duration 0.6s"
+    used_in: ["most sections"]
+
+  section_skeleton:
+    component: "SectionSkeleton"
+    file: "src/components/common/SectionSkeleton.jsx"
+    purpose: "Minimal loading placeholder for sections"
+    css: "min-h-[200px]"
+    used_in: ["LandingRenderer Suspense fallback"]
+
+# ─────────────────────────────────────────────
+# UI PRIMITIVES
+# src/components/ui/
+# ─────────────────────────────────────────────
+ui_primitives:
+
+  button:
+    component: "Button"
+    file: "src/components/ui/button.tsx"
+    purpose: "Base button component with variants (shadcn/ui style)"
+    uses:
+      - "@radix-ui/react-slot"
+      - "class-variance-authority"
+
+# ─────────────────────────────────────────────
+# SECTION REGISTRY — BIOMEDICAL
+# Governs: src/landings/biomedical/sections/
+# ─────────────────────────────────────────────
+section_registry_biomedical:
+
+  navbar:
+    key: "navbar"
+    file: "src/landings/biomedical/sections/Navbar.tsx"
+    export: "Navbar (named)"
+    purpose: "Top navigation bar with logo, links, and CTA"
+    responsive: "Hamburger menu on mobile"
+
+  hero:
+    key: "hero"
+    file: "src/landings/biomedical/sections/Hero.tsx"
+    export: "Hero (named)"
+    purpose: "Main hero with headline, description, CTA, video, and rotating reviews"
+    responsive: "Single column on mobile (video background), 2-col on desktop"
+    data_sources:
+      - "API: highlighted_transformations → review cards"
+      - "Static: heroReviews from data/index.js (fallback)"
+    features:
+      - "Rotating review carousel (auto-advance 4.5s)"
+      - "YouTube video with play overlay (desktop)"
+      - "Fancybox modal for video (mobile)"
+      - "Autoplay muted background video (mobile)"
+
+  before_after:
+    key: "beforeAfter"
+    file: "src/landings/biomedical/sections/BeforeAfter.tsx"
+    export: "BeforeAfter (named)"
+    purpose: "Before/after transformation cards showing results"
+    data_sources:
+      - "Static: beforeAfterCards from data/index.js"
+
+  who_for:
+    key: "whoFor"
+    file: "src/landings/biomedical/sections/WhoFor.tsx"
+    export: "WhoFor (named)"
+    purpose: "Target audience checklist — who is this program for"
+    data_sources:
+      - "Static: whoForItems from data/index.js"
+
+  video_testimonials:
+    key: "videoTestimonials"
+    file: "src/landings/biomedical/sections/VideoTestimonials.tsx"
+    export: "VideoTestimonials (named)"
+    purpose: "Video testimonial grid with Fancybox modal"
+    data_sources:
+      - "Static: videoTestimonials from data/index.js"
+
+  cta_banner:
+    key: "ctaBanner"
+    file: "src/landings/biomedical/sections/CTABanner.tsx"
+    export: "CTABanner (named)"
+    purpose: "Full-width CTA banner with gradient background"
+
+  how_it_works:
+    key: "howItWorks"
+    file: "src/landings/biomedical/sections/HowItWorks.tsx"
+    export: "HowItWorks (named)"
+    purpose: "Step-by-step process explanation"
+    data_sources:
+      - "Static: howItWorksSteps from data/index.js"
+
+  guarantee:
+    key: "guarantee"
+    file: "src/landings/biomedical/sections/Guarantee.tsx"
+    export: "Guarantee (named)"
+    purpose: "Money-back guarantee section"
+
+  pricing:
+    key: "pricing"
+    file: "src/landings/biomedical/sections/Pricing.tsx"
+    export: "Pricing (named)"
+    purpose: "Pricing plans with CTA buttons"
+    data_sources:
+      - "Static: pricingOptions, pricingFeatures from data/index.js"
+
+  faq:
+    key: "faq"
+    file: "src/landings/biomedical/sections/FAQ.tsx"
+    export: "FAQ (named)"
+    purpose: "Frequently asked questions accordion"
+    data_sources:
+      - "Static: faqs from data/index.js"
+
+  sticky_cta:
+    key: "stickyCta"
+    file: "src/landings/biomedical/sections/StickyCTA.tsx"
+    export: "StickyCTA (named)"
+    purpose: "Fixed bottom CTA bar that appears on scroll"
+
+  final_cta:
+    key: "finalCta"
+    file: "src/landings/biomedical/sections/FinalCTA.tsx"
+    export: "FinalCTA (named)"
+    purpose: "Final conversion section before footer"
+
+# ─────────────────────────────────────────────
+# SECTION REGISTRY — LIFESTYLE
+# Governs: src/landings/lifestyle/sections/
+# ─────────────────────────────────────────────
+section_registry_lifestyle:
+
+  hero:
+    key: "hero"
+    file: "src/landings/lifestyle/sections/Hero.jsx"
+    export: "default"
+    purpose: "Hero with video background (mobile), split layout (desktop), YouTube IFrame API"
+    responsive: "Full-screen video background on mobile, 2-col split on desktop"
+    features:
+      - "YouTube IFrame API for inline desktop playback"
+      - "Fancybox modal for mobile video"
+      - "Autoplay muted background iframe (mobile)"
+      - "Thumbnail fallback chain"
+
+  transformation_videos:
+    key: "transformationVideos"
+    file: "src/landings/lifestyle/sections/TransformationVideos.jsx"
+    export: "default"
+    purpose: "Video testimonial carousel"
+
+  guarantee:
+    key: "guarantee"
+    file: "src/landings/lifestyle/sections/Guarantee.jsx"
+    export: "default"
+    purpose: "Money-back guarantee with gradient background"
+
+  transformations:
+    key: "transformations"
+    file: "src/landings/lifestyle/sections/Transformations.jsx"
+    export: "default"
+    purpose: "Before/after transformation cards with images"
+    data_sources:
+      - "Static: transformations from data/transformations.js"
+
+  pricing:
+    key: "pricing"
+    file: "src/landings/lifestyle/sections/Pricing.jsx"
+    export: "default"
+    purpose: "Pricing plans with CTA"
+
+  partners:
+    key: "partners"
+    file: "src/landings/lifestyle/sections/Partners.jsx"
+    export: "default"
+    purpose: "Partner/trust logos section"
+
+  faq:
+    key: "faq"
+    file: "src/landings/lifestyle/sections/FAQ.jsx"
+    export: "default"
+    purpose: "FAQ accordion section"
+
+  why_join:
+    key: "whyJoin"
+    file: "src/landings/lifestyle/sections/WhyJoin.jsx"
+    export: "default"
+    purpose: "Reasons to join section"
+
+# ─────────────────────────────────────────────
+# LAYOUT COMPONENTS
+# Optional per-landing components (Footer, WhatsApp, etc.)
+# ─────────────────────────────────────────────
+layout_components:
+
+  lifestyle_footer:
+    component: "Footer"
+    file: "src/landings/lifestyle/components/Footer.jsx"
+    export: "default"
+    purpose: "Landing page footer with links and branding"
+    lazy_loaded: true
+    used_in: ["lifestyle"]
+
+  lifestyle_whatsapp:
+    component: "WhatsAppButton"
+    file: "src/landings/lifestyle/components/WhatsAppButton.jsx"
+    export: "default"
+    purpose: "Floating WhatsApp chat button"
+    lazy_loaded: true
+    used_in: ["lifestyle"]
+
+# ─────────────────────────────────────────────
+# THEME REGISTRY
+# ─────────────────────────────────────────────
+theme_registry:
+
+  biomedical:
+    file: "src/themes/biomedical.js"
+    export: "biomedicalTheme"
+    colors:
+      primary: "#e63312 (brand red)"
+      dark: "#172120 (brand dark)"
+      cream: "#f6f6f6 (off-white)"
+      accent: "#47706c (teal)"
+    color_format: "hex"
+    used_in: ["biomedical"]
+
+  lifestyle:
+    file: "src/themes/lifestyle.js"
+    export: "lifestyleTheme"
+    colors:
+      primary: "oklch(0.655 0.213 36.5) (brand red)"
+      dark: "oklch(0.18 0.012 180) (brand dark)"
+      cream: "oklch(0.97 0.01 60) (off-white)"
+    color_format: "oklch"
+    used_in: ["lifestyle"]
+
+# ─────────────────────────────────────────────
+# ANIMATION PATTERNS
+# Golden Reference: Rule 7.1
+# ─────────────────────────────────────────────
+animation_patterns:
+
+  fade_in_up:
+    library: "Framer Motion"
+    config:
+      initial: { opacity: 0, y: 20 }
+      whileInView: { opacity: 1, y: 0 }
+      viewport: { once: true, margin: "-80px" }
+      transition: { duration: 0.6 }
+    usage: "Default entry animation for sections and elements"
+
+  fade_in:
+    library: "Framer Motion"
+    config:
+      initial: { opacity: 0 }
+      animate: { opacity: 1 }
+      transition: { duration: 0.5 }
+    usage: "Simple opacity fade for logo, text"
+
+  staggered_children:
+    library: "Framer Motion"
+    config:
+      transition_delay_increment: 0.1
+    usage: "Sequential element reveals within a section"
+
+  hover_lift:
+    library: "Framer Motion"
+    config:
+      whileHover: { y: -2 }
+    usage: "CTAButton hover effect"
+
+  scale_press:
+    library: "Tailwind CSS"
+    config:
+      hover: "scale-[1.03]"
+      active: "scale-[0.98]"
+    usage: "Button and card interactions"
+
+  float_slow:
+    library: "CSS"
+    config:
+      animation: "float-slow 4s ease-in-out infinite"
+    usage: "Decorative floating elements"
+
+  pulse_ring:
+    library: "CSS"
+    config:
+      animation: "pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
+    usage: "Play button pulsing ring effect"
+
+# ─────────────────────────────────────────────
+# VIDEO INTEGRATION PATTERNS
+# Golden Reference: Rule 7.2
+# ─────────────────────────────────────────────
+video_patterns:
+
+  youtube_iframe_api:
+    usage: "Desktop inline video playback"
+    implementation: "Dynamic script injection, YT.Player constructor"
+    features:
+      - "Play / pause / resume toggle"
+      - "State management: idle → playing → paused"
+      - "Cleanup on unmount"
+    used_in: ["lifestyle/Hero"]
+
+  fancybox_modal:
+    library: "@fancyapps/ui"
+    usage: "Mobile video modal, testimonial videos"
+    implementation: "Lazy-loaded via IntersectionObserver"
+    config:
+      Toolbar: false
+      animated: true
+      dragToClose: true
+      closeButton: true
+      Youtube: { autoplay: 1 }
+    custom_hook: "useFancybox"
+    used_in: ["biomedical/Hero", "lifestyle/Hero"]
+
+  youtube_background:
+    usage: "Mobile muted autoplay background video"
+    implementation: "YouTube iframe with autoplay=1&mute=1&loop=1&controls=0"
+    sizing: "w-[177.78vh] min-w-full h-[56.25vw] min-h-full centered"
+    opacity: "opacity-25 to opacity-30"
+    used_in: ["biomedical/Hero", "lifestyle/Hero"]
+
+# ─────────────────────────────────────────────
+# FILE NAMING CONVENTIONS
+# ─────────────────────────────────────────────
+naming:
+  section_component: "PascalCase.jsx or .tsx — e.g. Hero.jsx, BeforeAfter.tsx"
+  shared_component: "PascalCase.jsx — e.g. CTAButton.jsx, Container.jsx"
+  hook: "camelCase.js or .ts — e.g. useLandingApi.js, useFancybox.ts"
+  data_file: "camelCase.js — e.g. transformations.js, index.js"
+  theme_file: "camelCase.js — e.g. biomedical.js, lifestyle.js"
+  config_file: "camelCase.js — e.g. landings.js"
+  utility: "camelCase.ts — e.g. utils.ts"
+  section_key: "camelCase — e.g. hero, beforeAfter, videoTestimonials"
+  landing_key: "camelCase — e.g. biomedical, lifestyle"
+  export_default: "lifestyle sections use default export"
+  export_named: "biomedical sections use named export"
+
+# ─────────────────────────────────────────────
+# REGISTRY CHANGELOG
+# ─────────────────────────────────────────────
+changelog:
+  - version: "1.0.0"
+    date: "2026-05-18"
+    author: "SST Team"
+    changes:
+      - "Initial registry created with biomedical and lifestyle sections"
+      - "Registered all common components (Container, CTAButton, SectionTitle, SectionSkeleton)"
+      - "Registered theme system (biomedical, lifestyle)"
+      - "Registered animation and video patterns"

@@ -33,7 +33,7 @@ export const Pricing = memo(function Pricing() {
     return staticTags;
   }, [apiData]);
 
-  const [sel, setSel] = useState<string>(pricingOptions[0]?.id ?? "6m");
+  const [sel, setSel] = useState<string>(pricingOptions[1]?.id ?? "6m");
   const handleSelect = useCallback((id: string) => setSel(id), []);
   const current = pricingOptions.find((o: any) => o.id === sel) ?? pricingOptions[0];
 

@@ -1,0 +1,286 @@
+##
+## ============================================================
+## LANDING PAGE TEMPLATE — v2.0.0
+## ============================================================
+## HOW TO USE (for AI & developers):
+##   1. Replace every <placeholder> with the actual value.
+##   2. Remove any block marked [OPTIONAL] if not needed.
+##   3. Sections list determines rendering order.
+##   4. Never leave a <placeholder> in the final file.
+##   5. Booleans: true / false only.
+## ============================================================
+##
+
+schema_version: "2.0.0"
+
+# ─────────────────────────────────────────────
+# 1. LANDING IDENTITY
+# ─────────────────────────────────────────────
+landing:
+  key: "<landing_key>"                     # snake_case, unique across project. e.g. "biomedical"
+  slug: "<url_slug>"                       # URL path segment. e.g. "biomedical" → /biomedical
+  name: "<landing_name>"                   # Human-readable name. e.g. "SST Biomedical"
+  theme: "<theme_key>"                     # Matches key in src/themes/<key>.js
+  description: "<landing_description>"     # One sentence, plain Arabic.
+
+# ─────────────────────────────────────────────
+# 2. ROUTING
+# ─────────────────────────────────────────────
+routing:
+  file: "src/routes/$slug.tsx"             # TanStack Router file (shared by all landings)
+  default_redirect: false                  # true = this is the landing shown at /
+  # Only one landing should have default_redirect: true
+
+# ─────────────────────────────────────────────
+# 3. META / SEO
+# ─────────────────────────────────────────────
+meta:
+  title: "<page_title_arabic>"
+  description: "<meta_description_arabic>"
+  og_title: "<open_graph_title_arabic>"
+  og_description: "<open_graph_description_arabic>"
+  og_type: "website"
+  twitter_card: "summary"
+
+# ─────────────────────────────────────────────
+# 4. API CONFIGURATION
+# ─────────────────────────────────────────────
+api:
+  enabled: true                            # false = static-only landing (no API call)
+  api_key: "<api_key>"                     # Bearer token for this landing's API
+  endpoint: "<endpoint>"                   # Appended to VITE_API_BASE_URL. e.g. "biomedical"
+  # Full URL: ${VITE_API_BASE_URL}/${endpoint}
+  # Auth header: Authorization: Bearer ${api_key}
+
+  # Expected response shape:
+  # { "status": true, "data": { ... } }
+  # Data is accessible via useLandingData() hook in sections
+
+  # response_fields:                       # [OPTIONAL] document expected fields
+  #   - key: "<field_key>"
+  #     type: "<array|object|string|number>"
+  #     description: "<what_this_field_contains>"
+
+# ─────────────────────────────────────────────
+# 5. SECTIONS (ordered list)
+# ─────────────────────────────────────────────
+# Each key must have a matching entry in:
+#   src/landings/<landing_key>/sections.js → SECTION_MAP
+# Sections render in this exact order.
+# ─────────────────────────────────────────────
+sections:
+  - "<section_key_1>"                      # e.g. "navbar"
+  - "<section_key_2>"                      # e.g. "hero"
+  - "<section_key_3>"                      # e.g. "pricing"
+  - "<section_key_4>"                      # e.g. "faq"
+
+# ─────────────────────────────────────────────
+# 6. SECTION MAP REGISTRATION
+# ─────────────────────────────────────────────
+# Each entry maps a section key to a lazy-loaded component.
+# File: src/landings/<landing_key>/sections.js
+#
+# section_map:
+#   - key: "<section_key>"
+#     file: "src/landings/<landing_key>/sections/<ComponentName>.<jsx|tsx>"
+#     export: "<ExportName>"               # "default" or named export
+#     notes: "<section_purpose>"
+# ─────────────────────────────────────────────
+
+# ─────────────────────────────────────────────
+# 7. LAYOUT COMPONENTS
+# ─────────────────────────────────────────────
+layout:
+  footer: false                            # true = render Footer component
+  footer_component: ~                      # [OPTIONAL] e.g. "src/landings/<key>/components/Footer.jsx"
+  whatsapp: false                          # true = render WhatsApp floating button
+  whatsapp_component: ~                    # [OPTIONAL] e.g. "src/landings/<key>/components/WhatsAppButton.jsx"
+  sticky_cta: false                        # [OPTIONAL] true = render sticky bottom CTA
+
+# ─────────────────────────────────────────────
+# 8. THEME
+# ─────────────────────────────────────────────
+# File: src/themes/<theme_key>.js
+# All CSS custom properties applied to <html> via ThemeProvider.
+# ─────────────────────────────────────────────
+theme:
+  file: "src/themes/<theme_key>.js"
+  css_framework: "Tailwind CSS 4"
+
+  brand_colors:
+    - variable: "--brand-red"
+      value: "<hex_or_oklch>"
+      usage: "Primary CTA color"
+    - variable: "--brand-dark"
+      value: "<hex_or_oklch>"
+      usage: "Dark backgrounds"
+    - variable: "--brand-offwhite"
+      value: "<hex_or_oklch>"
+      usage: "Light backgrounds"
+    - variable: "--brand-teal"
+      value: "<hex_or_oklch>"
+      usage: "Accent tags, badges"
+
+  semantic_colors:
+    - variable: "--primary"
+      value: "<hex_or_oklch>"
+    - variable: "--primary-foreground"
+      value: "<hex_or_oklch>"
+    - variable: "--background"
+      value: "<hex_or_oklch>"
+    - variable: "--foreground"
+      value: "<hex_or_oklch>"
+
+  gradients:
+    - variable: "--gradient-hero"
+      value: "<css_gradient>"
+    - variable: "--gradient-primary"
+      value: "<css_gradient>"
+    - variable: "--gradient-guarantee"
+      value: "<css_gradient>"
+
+  shadows:
+    - variable: "--shadow-glow"
+      value: "<css_box_shadow>"
+    - variable: "--shadow-card"
+      value: "<css_box_shadow>"
+
+# ─────────────────────────────────────────────
+# 9. FONTS
+# ─────────────────────────────────────────────
+fonts:
+  type: "<custom | google>"                # custom = @font-face, google = Google Fonts CDN
+  families:
+    - class: "regular"
+      source: "<@font-face | Google Fonts>"
+    - class: "medium"
+      source: "<@font-face | Google Fonts>"
+    - class: "bold"
+      source: "<@font-face | Google Fonts>"
+  fallback: '"Cairo", "Tajawal", system-ui, sans-serif'
+
+# ─────────────────────────────────────────────
+# 10. STATIC DATA FILES
+# ─────────────────────────────────────────────
+# List all static data files in src/landings/<key>/data/
+# ─────────────────────────────────────────────
+data_files:
+  - path: "src/landings/<landing_key>/data/index.js"
+    exports:
+      - name: "<variable_name>"
+        description: "<what_it_contains>"
+  # - path: "src/landings/<landing_key>/data/<file>.js"
+  #   exports:
+  #     - name: "<variable_name>"
+  #       description: "<what_it_contains>"
+
+# ─────────────────────────────────────────────
+# 11. ASSETS
+# ─────────────────────────────────────────────
+# List key image/video assets used by this landing.
+# All assets imported via Vite from src/assets/.
+# ─────────────────────────────────────────────
+assets:
+  images: []
+  # - key: "<asset_name>"
+  #   path: "src/assets/<filename>"
+  #   usage: "<which_section_uses_it>"
+  videos: []
+  # - key: "<video_id>"
+  #   platform: "youtube"
+  #   video_id: "<youtube_id>"
+  #   usage: "<which_section_uses_it>"
+
+# ─────────────────────────────────────────────
+# 12. LANDINGRENDERER INTEGRATION
+# ─────────────────────────────────────────────
+# Steps to register this landing in the renderer.
+# ─────────────────────────────────────────────
+renderer_integration:
+  # Step 1: Add entry to src/config/landings.js
+  config_entry: |
+    {
+      apiKey: "<api_key>",
+      apiEndpoint: "<endpoint>",
+      theme: "<theme_key>",
+      meta: {
+        title: "<title>",
+        description: "<description>",
+        ogTitle: "<og_title>",
+        ogDescription: "<og_description>",
+      },
+      sections: [ <section_keys_comma_separated> ],
+      layout: { footer: <true|false>, whatsapp: <true|false> },
+      fonts: "<custom|google>",
+    }
+
+  # Step 2: Register section map in src/LandingRenderer.jsx
+  section_map_import: |
+    import { SECTION_MAP as <landingKey>Sections } from "@/landings/<landing_key>/sections";
+  
+  section_maps_entry: |
+    const sectionMaps = {
+      <existing_entries>,
+      <landing_key>: <landingKey>Sections,
+    };
+
+  # Step 3: [OPTIONAL] Register layout components in src/LandingRenderer.jsx
+  layout_import: ~
+  # |
+  #   const <LandingKey>Footer = lazy(() =>
+  #     import("@/landings/<landing_key>/components/Footer").then(m => ({ default: m.default }))
+  #   );
+
+  layout_components_entry: ~
+  # |
+  #   const layoutComponents = {
+  #     <existing_entries>,
+  #     <landing_key>: { Footer: <LandingKey>Footer },
+  #   };
+
+# ─────────────────────────────────────────────
+# 13. FILE STRUCTURE
+# ─────────────────────────────────────────────
+# Expected directory structure for this landing.
+# ─────────────────────────────────────────────
+file_structure: |
+  src/landings/<landing_key>/
+  ├── sections.js          ← SECTION_MAP export
+  ├── sections/
+  │   ├── Navbar.<jsx|tsx>
+  │   ├── Hero.<jsx|tsx>
+  │   └── ...
+  ├── data/
+  │   └── index.js         ← static fallback data
+  └── components/          ← [OPTIONAL] landing-specific shared components
+      ├── Footer.jsx
+      └── ...
+
+# ─────────────────────────────────────────────
+# 14. META
+# ─────────────────────────────────────────────
+meta:
+  owner: "<team_or_owner>"
+  version: "1.0.0"
+  tags:
+    - "<tag>"
+  notes: "<internal_notes>"
+  created_at: "<YYYY-MM-DD>"
+  updated_at: "<YYYY-MM-DD>"
+
+# ─────────────────────────────────────────────
+# AI FILL INSTRUCTIONS (strip this block before committing)
+# ─────────────────────────────────────────────
+# ai_hints:
+#   - Replace all <placeholders> with real values.
+#   - landing.key must be snake_case and unique.
+#   - theme must match a file in src/themes/<key>.js.
+#   - sections[] order determines rendering order.
+#   - Each section key must exist in the SECTION_MAP.
+#   - layout.footer/whatsapp require corresponding lazy imports
+#     in LandingRenderer.jsx.
+#   - API key should be a valid Bearer token for the backend.
+#   - Remove every [OPTIONAL] block that is not needed.
+#   - Do NOT leave any ~ on required fields.
+#   - Strip this ai_hints block before the final file is used.
+# ─────────────────────────────────────────────
