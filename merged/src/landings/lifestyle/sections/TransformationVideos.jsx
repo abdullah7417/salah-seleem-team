@@ -6,23 +6,64 @@ import "swiper/css";
 import Container from "@/components/common/Container";
 import { videoThumbs as staticThumbs } from "../data/transformations";
 import { useLandingData } from "@/context/LandingDataContext";
+import { useFancybox } from "@/hooks/useFancybox";
+
+const FANCYBOX_SELECTOR = "[data-fancybox='transformation-videos']";
+
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  );
+  return m ? m[1] : null;
+}
+
+function handleThumbError(e) {
+  const img = e.currentTarget;
+  const fallback = img.dataset.fallback;
+  if (fallback && img.src !== fallback) {
+    img.src = fallback;
+  }
+}
 
 export default function TransformationVideos() {
   const apiData = useLandingData();
+
+  const { ref: fancyboxRef } = useFancybox(FANCYBOX_SELECTOR, {
+    Toolbar: false,
+    animated: true,
+    dragToClose: true,
+    closeButton: true,
+    Youtube: { autoplay: 1 },
+  });
+
   const videoThumbs = useMemo(() => {
+    const enrich = (item) => {
+      const videoId = getYouTubeId(item.youtubeUrl);
+      return {
+        ...item,
+        thumbnail: videoId
+          ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+          : null,
+      };
+    };
+
     const ht = apiData?.highlighted_transformations;
-    if (!ht?.length) return staticThumbs;
+    if (!ht?.length) return staticThumbs.map(enrich);
     return ht.map((t, i) => {
       const staticFallback = staticThumbs[i % staticThumbs.length];
-      return {
+      const youtubeUrl =
+        t.video_url || t.youtube_url || staticFallback?.youtubeUrl || "";
+      return enrich({
         id: t.id || i + 1,
         image: t.image_after || t.image_before || staticFallback?.image || "",
-      };
+        youtubeUrl,
+      });
     });
   }, [apiData]);
 
   return (
-    <section className="py-16 md:py-24 bg-background">
+    <section className="py-16 md:py-24 bg-background" ref={fancyboxRef}>
       <Container>
         <div className="text-center pb-10 md:pb-12">
           <h2 className="bold text-dark text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-[1.5]">
@@ -50,22 +91,25 @@ export default function TransformationVideos() {
         >
           {videoThumbs.map((v) => (
             <SwiperSlide key={v.id}>
-              <button
-                type="button"
-                aria-label="شغّل الفيديو"
-                className="relative block w-full aspect-[9/14] rounded-2xl overflow-hidden group shadow-card"
+              <a
+                href={v.youtubeUrl}
+                data-fancybox="transformation-videos"
+                aria-label="شغّل فيديو التحول"
+                className="relative block w-full aspect-[9/14] rounded-2xl overflow-hidden group shadow-card cursor-pointer"
               >
                 <img
-                  src={v.image}
+                  src={v.thumbnail || v.image}
+                  data-fallback={v.image}
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
+                  onError={handleThumbError}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent" />
                 <span className="absolute inset-0 m-auto w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/95 grid place-items-center shadow-glow group-hover:scale-110 transition">
                   <FaPlay className="w-5 h-5 md:w-6 md:h-6 text-primary translate-x-0.5" />
                 </span>
-              </button>
+              </a>
             </SwiperSlide>
           ))}
         </Swiper>

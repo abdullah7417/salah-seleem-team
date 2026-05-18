@@ -15,12 +15,14 @@ export const transformations = [
   { id: 6, name: "عمر عبد القادر", age: 31, result: "معدل الجري زاد من 2 لــ 11 كيلو", before: t6, after: t1 },
 ];
 
+const PLACEHOLDER_VIDEO = "https://www.youtube.com/watch?v=TDmQrVuUPpw";
+
 export const videoThumbs = [
-  { id: 1, image: t1 },
-  { id: 2, image: t2 },
-  { id: 3, image: t3 },
-  { id: 4, image: t4 },
-  { id: 5, image: t5 },
-  { id: 6, image: t6 },
-  { id: 7, image: t1 },
+  { id: 1, image: t1, youtubeUrl: PLACEHOLDER_VIDEO },
+  { id: 2, image: t2, youtubeUrl: PLACEHOLDER_VIDEO },
+  { id: 3, image: t3, youtubeUrl: PLACEHOLDER_VIDEO },
+  { id: 4, image: t4, youtubeUrl: PLACEHOLDER_VIDEO },
+  { id: 5, image: t5, youtubeUrl: PLACEHOLDER_VIDEO },
+  { id: 6, image: t6, youtubeUrl: PLACEHOLDER_VIDEO },
+  { id: 7, image: t1, youtubeUrl: PLACEHOLDER_VIDEO },
 ];
