@@ -4,6 +4,8 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { useFancybox } from "@/hooks/useFancybox";
 import coachHero from "@/assets/coach-hero.jpg";
+import { useLandingData } from "@/context/LandingDataContext";
+
 
 const YOUTUBE_VIDEO_ID = "5nz32pPBq8w";
 const YOUTUBE_URL = `https://www.youtube.com/watch?v=${YOUTUBE_VIDEO_ID}`;
@@ -183,6 +185,7 @@ export default function Hero() {
       ytPlayerRef.current = null;
     };
   }, []);
+  const apiData = useLandingData();
 
   return (
     <section id="top" ref={fancyboxRef} className="relative bg-dark">
@@ -235,7 +238,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="bold text-white leading-[1.25] text-[2.6rem] sm:text-5xl max-w-[20ch]"
           >
-            هتوصل للفورمة في <span className="text-primary">90 يوم</span> بس من غير مكملات وبأكل
+            {apiData?.general_data[0]?.title || "هتوصل للفورمة في <span className=\"text-primary\">90 يوم</span> بس من غير مكملات وبأكل عادي من البيت"}
             عادي من البيت
           </motion.h1>
 
@@ -267,9 +270,9 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-10 text-white/85 text-[15px] leading-[1.9] max-w-md"
           >
-            مع متابعة يومية من فريق طبي ورياضي متكامل غيّر حياة الآلاف للأحسن في أكثر من
+{apiData?.general_data[0]?.hero_description_trans || "مع متابعة يومية من فريق طبي ورياضي متكامل غيّر حياة الآلاف للأحسن في أكثر من"}            
             <span className="bold"> 77 </span>
-            دولة ببرامج مُصممة بالمتاح ليك من وقت وامكانيات
+            {apiData?.general_data[0]?.hero_title_trans || " دولة ببرامج مُصممة بالمتاح ليك من وقت وامكانيات"}
           </motion.p>
 
             {/* CTA → scrolls to #join */}
@@ -280,8 +283,8 @@ export default function Hero() {
             className="mt-6"
           >
            <a href="#join" className="inline-flex items-center justify-center bg-primary text-white bold text-lg md:text-xl px-10 py-4 rounded-full shadow-glow hover:bg-primary-deep transition">
-              يلا نعمل فورمة
-            </a>
+             {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
+           </a>
           </motion.div>
         </div>
       </div>

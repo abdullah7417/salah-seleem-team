@@ -8,6 +8,16 @@ import Container from "@/components/common/Container";
 import { transformations as staticTransformations } from "../data/transformations";
 import { useLandingData } from "@/context/LandingDataContext";
 
+const highlightSubtitle = (text) => {
+  const parts = text.split(/(الدنيا إنك|الحقيقي إنك|وتعمل فورمة)/g);
+  return parts.map((part, index) => {
+    if (["الدنيا إنك", "الحقيقي إنك", "وتعمل فورمة"].includes(part)) {
+      return <span key={index} className="text-primary">{part}</span>;
+    }
+    return part;
+  });
+};
+
 function Card({ t }) {
   return (
     <motion.div
@@ -47,10 +57,10 @@ function Card({ t }) {
         <h4 className="bold text-dark text-lg md:text-xl leading-tight mb-2">{t.result}</h4>
         <div className="mt-auto">
           <div className="text-primary bold">
-            {t.name} - {t.age} سنة
+            {t.name} 
           </div>
           <div className="text-muted-foreground text-sm mt-1">
-            بعد التدريب واتباع نظام غذائي مع SST
+            {t.description}
           </div>
         </div>
       </div>
@@ -61,7 +71,7 @@ function Card({ t }) {
 export default function Transformations() {
   const apiData = useLandingData();
   const transformations = useMemo(() => {
-    const ht = apiData?.highlighted_transformations;
+    const ht = apiData?.transformationHeros;
     if (!ht?.length) return staticTransformations;
     return ht.map((t, i) => {
       const staticFallback = staticTransformations[i % staticTransformations.length];
@@ -72,6 +82,7 @@ export default function Transformations() {
         result: t.target || t.final_result || "",
         before: t.image_before || staticFallback?.before || "",
         after: t.image_after || staticFallback?.after || "",
+        description: t.description || "بعد التدريب واتباع نظام غذائي مع SST",
       };
     });
   }, [apiData]);
@@ -81,12 +92,10 @@ export default function Transformations() {
       <Container>
         <div className="text-center pb-10 md:pb-14 max-w-4xl mx-auto">
           <h2 className="bold text-primary text-3xl sm:text-4xl md:text-5xl mb-4">
-            التحول الحقيقي
+            {apiData?.general_data[1]?.transformation_title || "تحولات حقيقية لأشخاص حقيقيين"}
           </h2>
           <h3 className="bold text-dark text-lg sm:text-xl md:text-2xl leading-[1.8]">
-            أسهل حاجة في <span className="text-primary">الدنيا إنك</span> تخس بس التحدي{" "}
-            <span className="text-primary">الحقيقي إنك</span> تعيش حياة صحية{" "}
-            <span className="text-primary">وتعمل فورمة</span> قوية
+            {highlightSubtitle(apiData?.general_data[1]?.transformation_subtitle || "أسهل حاجة في الدنيا إنك تخس بس التحدي الحقيقي إنك تعيش حياة صحية وتعمل فورمة قوية")}
           </h3>
         </div>
 

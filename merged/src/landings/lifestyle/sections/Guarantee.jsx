@@ -1,12 +1,16 @@
 import { motion } from "framer-motion";
 import Container from "@/components/common/Container";
 import badge from "@/assets/guarantee-badge.png";
+import { useLandingData } from "@/context/LandingDataContext";
+
 
 /**
  * Guarantee section — dark background with red/orange radial glow + white badge on top.
  * Matches salahseleemteam.com/lifestyle "ضمان الفورمة" block.
  */
 export default function Guarantee() {
+    const apiData = useLandingData();
+
   return (
     <section className="py-12 md:py-16 bg-background">
       <Container>
@@ -29,17 +33,16 @@ export default function Guarantee() {
               loading="lazy"
             />
             <h3 className="bold text-white text-3xl md:text-5xl leading-tight mb-4">
-              ضمان الفورمة
+              {apiData?.general_data[0]?.ensure_title || "ضمان الفورمة"}
             </h3>
             <p className="text-white/95 text-lg md:text-2xl bold leading-relaxed mb-8">
-              لو ملاحظتش أي تطور في جسمك وصحتك بعد الالتزام الكامل بالبرامج لمدة 3 شهور، هنرجعلك
-              الاشتراك كامل
+             {apiData?.general_data[0]?.ensure_subtitle || "لو ماوصلتش للفورمة اللي عايزها في 90 يوم، هنرجعلك فلوسك كاملة بدون أي نقاش."}            
             </p>
             <a
               href="#join"
               className="inline-flex items-center justify-center bg-black text-white bold text-lg md:text-xl px-10 py-4 rounded-full hover:bg-dark-soft transition"
             >
-              يلا نعمل فورمة
+              {apiData?.general_data[0]?.ensure_btn_txt || "يلا نعمل فورمة"}
             </a>
           </div>
         </motion.div>

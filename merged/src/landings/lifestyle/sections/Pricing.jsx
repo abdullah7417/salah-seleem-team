@@ -13,8 +13,8 @@ export default function Pricing() {
     return memberships.map((m) => ({
       id: m.id,
       label: m.title || "",
-      price: m.outside_price || m.price || 0,
-      before: m.outside_price_before || m.price_before || 0,
+      price: m.price  || m.outside_price|| 0,
+      before:  m.price_before || m.outside_price_before || 0,
       duration: m.months || m.title || "",
     }));
   }, [apiData]);
@@ -71,7 +71,7 @@ export default function Pricing() {
                   بـ {plan.price}
                 </span>
                 <span className="text-black bold text-sm md:text-[17px] pr-1">
-                  بدلاً من <span className="line-through">{plan.before}</span> دولار
+                  بدلاً من <span className="line-through">{plan.before}</span> جنيه
                 </span>
               </div>
 
@@ -83,7 +83,7 @@ export default function Pricing() {
                 type="button"
                 className="w-full inline-flex items-center justify-center gap-3 bg-black text-white bold text-base md:text-lg py-4 rounded-full hover:bg-dark-soft transition group"
               >
-                <span>ادفع {plan.price} دولار</span>
+                <span>ادفع {plan.price} جنيه</span>
                 <FaArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition" />
               </button>
             </div>

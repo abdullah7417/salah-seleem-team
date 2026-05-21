@@ -46,6 +46,7 @@ export const landings = {
       "navbar",
       "hero",
       "transformationVideos",
+      "challengeComparison",
       "guarantee",
       "transformations",
       "pricing",

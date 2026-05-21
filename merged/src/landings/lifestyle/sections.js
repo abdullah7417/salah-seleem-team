@@ -10,4 +10,5 @@ export const SECTION_MAP = {
   partners: lazy(() => import("./sections/Partners")),
   faq: lazy(() => import("./sections/FAQ")),
   whyJoin: lazy(() => import("./sections/WhyJoin")),
+  challengeComparison: lazy(() => import("./sections/ChallengeComparisonSection")),
 };

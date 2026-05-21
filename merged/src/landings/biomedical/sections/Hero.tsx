@@ -201,21 +201,19 @@ export function Hero() {
       {isMobile && (
         <div className="relative text-center pt-10 pb-8 px-5 z-[2]">
           <div className="inline-block rounded-[20px] py-1 px-3.5 text-white bold bg-[rgba(255,255,255,0.12)] border-[1px solid rgba(255,255,255,0.2)] mb-4">
-            أول فريق طبي رياضي في مصر هيساعدك تعمل فورمة بسهولة
+            {apiData?.general_data[0]?.hero_badge || "أول فريق طبي رياضي في مصر هيساعدك تعمل فورمة بسهولة"}
           </div>
 
           <h1 className="text-white text-[34px] bold leading-12 mb-5">
-            لسه شايف إن الإصابة أو المرض سبب علشان توقف حياتك ومتوصلش للفورمة؟
+            {apiData?.general_data[0]?.title || "لسه شايف إن الإصابة أو المرض سبب علشان توقف حياتك ومتوصلش للفورمة؟"}
           </h1>
 
-          <p className="text-[14px] leading-12 text-[rgba(255,255,255,0.7)] mb-6">
-            في SST فريقنا الطبي والرياضي من دكاترة علاج طبيعي وأخصائيين تغذية
-            علاجية ومدربين Fitness هيصمموا كل البرامج على حسب إصابتك أو مرضك
-            علشان توصل لنسخة من نفسك مكنتش تعرف إن هي موجودة
+          <p className="text-[14px] leading-6 text-[rgba(255,255,255,0.7)] mb-6">
+            {apiData?.general_data[0]?.description || "في SST فريقنا الطبي والرياضي من دكاترة علاج طبيعي وأخصائيين تغذية علاجية ومدربين Fitness هيصمموا كل البرامج على حسب إصابتك أو مرضك علشان توصل لنسخة من نفسك مكنتش تعرف إن هي موجودة"}
           </p>
 
           <a href="#pricing" className="block w-full max-w-[420px] mx-auto bg-brand-red text-white rounded-[10px] p-4 text-base font-extrabold text-center transition-colors hover:bg-brand-red-hover active:scale-[0.98] cursor-pointer border-none">
-            يلا نعمل فورمة
+           {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
           </a>
 
           <a
@@ -223,12 +221,11 @@ export function Hero() {
             data-fancybox="hero-video"
             className="bold block w-full max-w-[420px] mx-auto mt-2 bg-white text-brand-red rounded-[10px] py-4 text-sm text-center cursor-pointer border-none no-underline"
           >
-            تشغيل الفيديو
+           {apiData?.general_data[0]?.hero_video_btn || "شوف ازاي هتتحول في 90 يوم"}
           </a>
 
           <p className="mb-2 text-[12px] text-[rgba(255,255,255,0.55)]">
-            لو التزمت بكل البرامج لمدة 90 يوم متواصلين وملاحظتش نتيجة واضحة
-            هتسترد فلوسك كاملة
+           {apiData?.general_data[0]?.ensure_subtitle || "لو التزمت بكل البرامج لمدة 90 يوم متواصلين وملاحظتش نتيجة واضحة هتسترد فلوسك كاملة"}
           </p>
 
           <ReviewCard r={r} visible={visible} idx={idx} goTo={goTo} />
@@ -240,27 +237,23 @@ export function Hero() {
           <div className="relative z-[2] grid grid-cols-2 gap-10 py-12 px-16 pb-8 max-w-[1200px] my-0 mx-auto w-full items-stretch">
             <div className="flex flex-col gap-4 text-right">
               <span className="inline-block py-[0.35rem] px-4 rounded-[20px] text-[12px] bold text-white bg-[rgba(255,255,255,0.1)] border-[1px solid rgba(255,255,255,0.2)] w-fit">
-                أول فريق طبي رياضي في مصر هيساعدك تعمل فورمة بسهولة
+                {apiData?.general_data[0]?.hero_badge || "أول فريق طبي رياضي في مصر هيساعدك تعمل فورمة بسهولة"}
               </span>
 
               <h1 className="text-white text-[38px] md:text-[48px] xl:text-[60px] bold leading-[60px]">
-                لسه شايف إن الإصابة أو المرض سبب علشان توقف حياتك ومتوصلش
-                للفورمة؟
+                {apiData?.general_data[0]?.title || "لسه شايف إن الإصابة أو المرض سبب علشان توقف حياتك ومتوصلش للفورمة؟"}
               </h1>
 
               <p className="text-[14px] md:text-[18px] text-[rgba(255,255,255,0.7)] leading-6 flex-1 regular">
-                في SST فريقنا الطبي والرياضي من دكاترة علاج طبيعي وأخصائيين
-                تغذية علاجية ومدربين Fitness هيصمموا كل البرامج على حسب إصابتك
-                أو مرضك علشان توصل لنسخة من نفسك مكنتش تعرف إن هي موجودة
+                {apiData?.general_data[0]?.description || "في SST فريقنا الطبي والرياضي من دكاترة علاج طبيعي وأخصائيين تغذية علاجية ومدربين Fitness هيصمموا كل البرامج على حسب إصابتك أو مرضك علشان توصل لنسخة من نفسك مكنتش تعرف إن هي موجودة"}
               </p>
 
               <a href="#pricing" className="block w-full max-w-[420px] bg-brand-red text-white rounded-[10px] p-4 text-base font-extrabold text-center transition-colors hover:bg-brand-red-hover active:scale-[0.98] cursor-pointer border-none lg:mx-0 self-start">
-                يلا نعمل فورمة
+                {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
               </a>
 
               <p className="text-[rgba(255,255,255,0.5)] text-[12px] md:text-[14px] regular">
-                لو التزمت بكل البرامج لمدة 90 يوم متواصلين وملاحظتش نتيجة واضحة
-                هتسترد فلوسك كاملة
+                {apiData?.general_data[0]?.ensure_subtitle || "لو التزمت بكل البرامج لمدة 90 يوم متواصلين وملاحظتش نتيجة واضحة هتسترد فلوسك كاملة"}
               </p>
             </div>
 
@@ -316,7 +309,7 @@ export function Hero() {
                   </div>
 
                   <div className="absolute bottom-[14px] right-[14px] bg-[rgba(0,0,0,0.6)] backdrop-blur-[6px] py-[0.3rem] px-[0.8rem] rounded-[20px] text-xs bold text-brand-red border border-[rgba(230,51,18,0.4)]">
-                    شوف ازاي هتتحول في 90 يوم
+                   {apiData?.general_data[0]?.hero_video_btn || "شوف ازاي هتتحول في 90 يوم"}
                   </div>
                 </div>
               )}

@@ -61,16 +61,7 @@ export default function FAQ() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center pb-12 md:pb-16">
             <h2 className="bold text-white text-2xl md:text-3xl lg:text-[38px] leading-[1.7]">
-              لو عندك سؤال غير الأسئلة الموجودة، ممكن تتواصل
-              <br className="hidden md:block" /> معانا من خلال{" "}
-              <a
-                href="https://wa.me/201050001587"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white inline-flex items-center gap-1.5 hover:text-primary align-middle transition-colors"
-              >
-                واتساب
-              </a>
+              {apiData?.general_data[1]?.faqs_title || "الأسئلة الشائعة"}
             </h2>
           </div>
 
