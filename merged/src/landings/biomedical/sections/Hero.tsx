@@ -234,8 +234,8 @@ export function Hero() {
 
       {!isMobile && (
         <>
-          <div className="relative z-[2] grid grid-cols-2 gap-10 py-12 px-16 pb-8 max-w-[1200px] my-0 mx-auto w-full items-stretch">
-            <div className="flex flex-col gap-4 text-right">
+          <div className="relative z-[2] grid grid-cols-12 gap-10 py-12 px-16 pb-8 max-w-[1200px] my-0 mx-auto w-full items-stretch">
+            <div className="flex flex-col gap-4 text-right col-span-7">
               <span className="inline-block py-[0.35rem] px-4 rounded-[20px] text-[12px] bold text-white bg-[rgba(255,255,255,0.1)] border-[1px solid rgba(255,255,255,0.2)] w-fit">
                 {apiData?.general_data[0]?.hero_badge || "أول فريق طبي رياضي في مصر هيساعدك تعمل فورمة بسهولة"}
               </span>
@@ -257,7 +257,7 @@ export function Hero() {
               </p>
             </div>
 
-            <div className="relative rounded-[16px] overflow-hidden min-h-[280px] bg-[#0e1a19] shadow-[0_20px_60px_rgba(0,0,0,0.5)]">
+            <div className="relative rounded-[16px] overflow-hidden min-h-[280px] bg-[#0e1a19] shadow-[0_20px_60px_rgba(0,0,0,0.5)] col-span-5">
               {desktopVideoPlaying ? (
                 <iframe
                   src="https://www.youtube.com/embed/j2ZwS94lAhg?autoplay=1&rel=0"

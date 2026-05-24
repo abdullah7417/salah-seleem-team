@@ -10,7 +10,7 @@ import "swiper/css/pagination";
 export const VideoTestimonials = memo(function VideoTestimonials() {
   const apiData = useLandingData();
   const videoTestimonials = useMemo(() => {
-    const videos = apiData?.videos?.length ? apiData.videos : (apiData?.videosWithoutChunk?.length ? apiData.videosWithoutChunk : null);
+    const videos = apiData?.videos[0]?.length ? apiData.videos[0] : (apiData?.videosWithoutChunk?.length ? apiData.videosWithoutChunk : null);
     if (!videos?.length) return staticTestimonials;
     return videos.map((v: any) => ({
       name: v.title || "",
