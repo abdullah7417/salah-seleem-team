@@ -10,6 +10,7 @@ const FALLBACK_PLANS = [
     id: 0,
     title: "تحدي الــ 90 يوم",
     description: "",
+    most_popular: 0,
     features: [],
     memberships: staticPlans.map((p) => ({
       id: p.id,
@@ -17,7 +18,6 @@ const FALLBACK_PLANS = [
       months: p.duration,
       price: p.price,
       price_before: p.before,
-      most_popular: 0,
     })),
   },
 ];
@@ -31,7 +31,7 @@ function PlanCard({ plan, features, selectedMembership, onSelect, onPay }) {
 
   return (
     <div className="relative rounded-3xl bg-[#f8a53d] p-5 sm:p-7 md:p-8 text-right overflow-hidden shadow-card">
-      {m?.most_popular === 1 && (
+      {Number(m?.id) === Number(plan?.most_popular) && (
         <span className="absolute top-4 left-4 text-[11px] bold text-black bg-white/80 px-3 py-1 rounded-full">
           الأكثر شعبية
         </span>
@@ -126,7 +126,7 @@ export default function Pricing() {
     const defaults = {};
     membershipPlans.forEach((plan) => {
       if (!plan.memberships?.length) return;
-      const popular = plan.memberships.find((m) => m.most_popular === 1);
+      const popular = plan.memberships.find((m) => Number(m.id) === Number(plan.most_popular));
       defaults[plan.id] = popular?.id ?? plan.memberships[0]?.id ?? null;
     });
     setSelections((prev) => ({ ...defaults, ...prev }));
