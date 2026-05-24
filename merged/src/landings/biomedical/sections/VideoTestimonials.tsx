@@ -75,9 +75,9 @@ export const VideoTestimonials = memo(function VideoTestimonials() {
   return (
     <section className="bg-white px-5 py-8" ref={sectionRef} aria-labelledby="testimonials-heading">
       <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
-        <p className="text-center text-[34px] md:text-[46px] bold text-text-primary leading-[1.25] tracking-tight mb-2" id="testimonials-heading">شوف بنفسك</p>
+        <p className="text-center text-[34px] md:text-[46px] bold text-text-primary leading-[1.25] tracking-tight mb-2" id="testimonials-heading">{apiData?.general_data[1]?.trans_video_title || "شوف بنفسك"}</p>
         <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-text-secondary mb-6 tracking-normal">
-          ناس حقيقية زيك وصلوا للفورمة وحياتهم اتغيرت
+          {apiData?.general_data[1]?.trans_video_subtitle || "شهادات حقيقية من عملائنا اللي جربوا الخدمة وشافوا نتائجها بعينهم"}
         </h2>
 
         <Swiper

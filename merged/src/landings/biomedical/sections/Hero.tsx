@@ -3,86 +3,86 @@ import { cn } from "@/lib/utils";
 import { heroReviews as staticHeroReviews } from "../data";
 import { useLandingData } from "@/context/LandingDataContext";
 
-const ReviewCard = memo(function ReviewCard({
-  r,
-  visible,
-  idx,
-  goTo,
-}: {
-  r: { init: string; name: string; tag: string; quote: string };
-  visible: boolean;
-  idx: number;
-  goTo: (i: number) => void;
-}) {
-  return (
-    <>
-      <div className="mt-6 rounded-xl p-[0.875rem_1rem] bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.1)]">
-        <div className="flex items-center gap-3 text-right">
-          <div
-            className={cn(
-              "w-12 h-12 rounded-full bg-[rgba(255,255,255,0.1)] flex items-center justify-center text-white bold shrink-0 transition-opacity duration-300",
-              visible ? "opacity-100" : "opacity-0",
-            )}
-          >
-            {r.init}
-          </div>
+// const ReviewCard = memo(function ReviewCard({
+//   r,
+//   visible,
+//   idx,
+//   goTo,
+// }: {
+//   r: { init: string; name: string; tag: string; quote: string };
+//   visible: boolean;
+//   idx: number;
+//   goTo: (i: number) => void;
+// }) {
+//   return (
+//     <>
+//       <div className="mt-6 rounded-xl p-[0.875rem_1rem] bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.1)]">
+//         <div className="flex items-center gap-3 text-right">
+//           <div
+//             className={cn(
+//               "w-12 h-12 rounded-full bg-[rgba(255,255,255,0.1)] flex items-center justify-center text-white bold shrink-0 transition-opacity duration-300",
+//               visible ? "opacity-100" : "opacity-0",
+//             )}
+//           >
+//             {r.init}
+//           </div>
 
-          <div
-            className={cn(
-              "flex-1 transition-opacity duration-300",
-              visible ? "opacity-100" : "opacity-0",
-            )}
-          >
-            <div
-              className="text-[11px] text-[#FBB043]"
-              aria-label="5 من 5 نجوم"
-            >
-              &#9733;&#9733;&#9733;&#9733;&#9733;
-            </div>
-            <p className="italic text-[13px] text-white leading-[1.6] mt-1">
-              {r.quote}
-            </p>
-            <div className="mt-2 flex items-center gap-2 flex-wrap">
-              <span className="text-xs bold text-white">{r.name}</span>
-              <span className="rounded-md py-[0.2rem] px-[0.5rem] text-[10px] font-semibold bg-[rgba(71,112,108,0.3)] text-[#66C1BF]">
-                {r.tag}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+//           <div
+//             className={cn(
+//               "flex-1 transition-opacity duration-300",
+//               visible ? "opacity-100" : "opacity-0",
+//             )}
+//           >
+//             <div
+//               className="text-[11px] text-[#FBB043]"
+//               aria-label="5 من 5 نجوم"
+//             >
+//               &#9733;&#9733;&#9733;&#9733;&#9733;
+//             </div>
+//             <p className="italic text-[13px] text-white leading-[1.6] mt-1">
+//               {r.quote}
+//             </p>
+//             <div className="mt-2 flex items-center gap-2 flex-wrap">
+//               <span className="text-xs bold text-white">{r.name}</span>
+//               <span className="rounded-md py-[0.2rem] px-[0.5rem] text-[10px] font-semibold bg-[rgba(71,112,108,0.3)] text-[#66C1BF]">
+//                 {r.tag}
+//               </span>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
 
-      <div
-        className="mt-3 flex justify-center gap-1.5"
-        role="tablist"
-        aria-label="التقييمات"
-      >
-        {Array.from({ length: 5 }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            aria-label={`تقييم ${i + 1}`}
-            aria-selected={i === idx}
-            role="tab"
-            className={cn(
-              "w-6 h-6 rounded-full border-none cursor-pointer p-0 transition-all duration-200 flex items-center justify-center",
-              i === idx ? "bg-brand-red" : "bg-[rgba(255,255,255,0.2)]",
-            )}
-          >
-            <span
-              className={cn(
-                "block rounded-full transition-transform duration-200",
-                i === idx
-                  ? "w-[7px] h-[7px] scale-[1.4] bg-white"
-                  : "w-[7px] h-[7px] bg-white/50",
-              )}
-            />
-          </button>
-        ))}
-      </div>
-    </>
-  );
-});
+//       <div
+//         className="mt-3 flex justify-center gap-1.5"
+//         role="tablist"
+//         aria-label="التقييمات"
+//       >
+//         {Array.from({ length: 5 }).map((_, i) => (
+//           <button
+//             key={i}
+//             onClick={() => goTo(i)}
+//             aria-label={`تقييم ${i + 1}`}
+//             aria-selected={i === idx}
+//             role="tab"
+//             className={cn(
+//               "w-6 h-6 rounded-full border-none cursor-pointer p-0 transition-all duration-200 flex items-center justify-center",
+//               i === idx ? "bg-brand-red" : "bg-[rgba(255,255,255,0.2)]",
+//             )}
+//           >
+//             <span
+//               className={cn(
+//                 "block rounded-full transition-transform duration-200",
+//                 i === idx
+//                   ? "w-[7px] h-[7px] scale-[1.4] bg-white"
+//                   : "w-[7px] h-[7px] bg-white/50",
+//               )}
+//             />
+//           </button>
+//         ))}
+//       </div>
+//     </>
+//   );
+// });
 
 export function Hero() {
   const apiData = useLandingData();
@@ -228,7 +228,7 @@ export function Hero() {
            {apiData?.general_data[0]?.ensure_subtitle || "لو التزمت بكل البرامج لمدة 90 يوم متواصلين وملاحظتش نتيجة واضحة هتسترد فلوسك كاملة"}
           </p>
 
-          <ReviewCard r={r} visible={visible} idx={idx} goTo={goTo} />
+          {/* <ReviewCard r={r} visible={visible} idx={idx} goTo={goTo} /> */}
         </div>
       )}
 
@@ -318,7 +318,7 @@ export function Hero() {
 
           <div className="relative z-[2] px-16 pb-10 max-w-[1200px] mx-auto w-full">
             <div className="w-full h-px bg-[rgba(255,255,255,0.1)] mb-8" />
-            <ReviewCard r={r} visible={visible} idx={idx} goTo={goTo} />
+            {/* <ReviewCard r={r} visible={visible} idx={idx} goTo={goTo} /> */}
           </div>
         </>
       )}
