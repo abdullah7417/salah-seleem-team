@@ -10,15 +10,38 @@ import "swiper/css/pagination";
 export const VideoTestimonials = memo(function VideoTestimonials() {
   const apiData = useLandingData();
   const videoTestimonials = useMemo(() => {
-    const videos = apiData?.videos[0]?.length ? apiData.videos[0] : (apiData?.videosWithoutChunk?.length ? apiData.videosWithoutChunk : null);
-    if (!videos?.length) return staticTestimonials;
-    return videos.map((v: any) => ({
-      name: v.title || "",
-      condition: v.type?.[0] || "",
-      caption: v.description || "",
-      duration: v.duration || "",
-      videoId: v.video_id || v.videoId || "",
-    }));
+    const videos = apiData?.videos?.[0]?.length
+      ? apiData.videos[0]
+      : apiData?.videosWithoutChunk?.length
+      ? apiData.videosWithoutChunk
+      : null;
+
+    if (!videos?.length) {
+      return staticTestimonials.map((v: any) => ({
+        name: v.name || "",
+        condition: v.condition || "",
+        caption: v.caption || "",
+        duration: v.duration || "",
+        url: v.videoId ? `https://www.youtube.com/watch?v=${v.videoId}` : "",
+        imageUrl: v.imageUrl || "",
+        thumbnail: v.videoId ? `https://img.youtube.com/vi/${v.videoId}/hqdefault.jpg` : "",
+        hasUrl: !!v.videoId,
+      }));
+    }
+
+    return videos.map((v: any) => {
+      const url = v.url || v.video_url || v.videoUrl || "";
+      return {
+        name: v.title || "",
+        condition: v.type?.[0] || "",
+        caption: v.description || "",
+        duration: v.duration || "",
+        url,
+        imageUrl: v.image_url || v.imageUrl || "",
+        thumbnail: v.thumbnail || v.image_url || v.imageUrl || "",
+        hasUrl: !!url,
+      };
+    });
   }, [apiData]);
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -74,48 +97,67 @@ export const VideoTestimonials = memo(function VideoTestimonials() {
         >
           {videoTestimonials.map((r: any, i: number) => (
             <SwiperSlide key={i}>
-              <a
-                href={`https://www.youtube.com/watch?v=${r.videoId}`}
-                data-fancybox="videos"
-                className="block overflow-hidden rounded-[10px] bg-white border-[0.5px] border-[#E5E7EB]"
-                aria-label={`فيديو شهادة: ${r.caption}`}
-              >
-                <div
-                  className="relative flex items-center justify-center bg-cover bg-center aspect-[9/16]"
-                  style={{
-                    backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 100%), url('https://img.youtube.com/vi/${r.videoId}/hqdefault.jpg')`,
-                  }}
+              {r.hasUrl ? (
+                <a
+                  href={r.url}
+                  data-fancybox="videos"
+                  className="block overflow-hidden rounded-[10px] bg-white border-[0.5px] border-[#E5E7EB]"
+                  aria-label={`فيديو شهادة: ${r.caption}`}
                 >
-                  <span className="absolute top-1.5 left-1.5 rounded-[3px] flex items-center bg-[#FF0000] px-1 py-[2px]" aria-hidden="true">
-                    <svg width="14" height="10" viewBox="0 0 24 17" fill="white">
-                      <path d="M23.5 2.6a3 3 0 0 0-2.1-2.1C19.6 0 12 0 12 0S4.4 0 2.6.5A3 3 0 0 0 .5 2.6C0 4.4 0 8.5 0 8.5s0 4.1.5 5.9a3 3 0 0 0 2.1 2.1C4.4 17 12 17 12 17s7.6 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.8.5-5.9.5-5.9s0-4.1-.5-5.9zM9.6 12V5l6.3 3.5L9.6 12z" />
-                    </svg>
-                  </span>
+                  <div
+                    className="relative flex items-center justify-center bg-cover bg-center aspect-[9/16]"
+                    style={{
+                      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 100%), url('${r.thumbnail || r.imageUrl}')`,
+                    }}
+                  >
+                    <span className="absolute top-1.5 left-1.5 rounded-[3px] flex items-center bg-[#FF0000] px-1 py-[2px]" aria-hidden="true">
+                      <svg width="14" height="10" viewBox="0 0 24 17" fill="white">
+                        <path d="M23.5 2.6a3 3 0 0 0-2.1-2.1C19.6 0 12 0 12 0S4.4 0 2.6.5A3 3 0 0 0 .5 2.6C0 4.4 0 8.5 0 8.5s0 4.1.5 5.9a3 3 0 0 0 2.1 2.1C4.4 17 12 17 12 17s7.6 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.8.5-5.9.5-5.9s0-4.1-.5-5.9zM9.6 12V5l6.3 3.5L9.6 12z" />
+                      </svg>
+                    </span>
 
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(230,51,18,0.9)]" aria-hidden="true">
-                    <span
-                      style={{
-                        width: 0,
-                        height: 0,
-                        borderTop: "5px solid transparent",
-                        borderBottom: "5px solid transparent",
-                        borderRight: "7px solid white",
-                        marginLeft: "-1px",
-                      }}
-                    />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[rgba(230,51,18,0.9)]" aria-hidden="true">
+                      <span
+                        style={{
+                          width: 0,
+                          height: 0,
+                          borderTop: "5px solid transparent",
+                          borderBottom: "5px solid transparent",
+                          borderRight: "7px solid white",
+                          marginLeft: "-1px",
+                        }}
+                      />
+                    </div>
+
+                    <span className="absolute bottom-1.5 right-1.5 rounded-[3px] text-[9px] text-white bg-[rgba(0,0,0,0.5)] py-[1px] px-1">
+                      {r.duration}
+                    </span>
                   </div>
 
-                  <span className="absolute bottom-1.5 right-1.5 rounded-[3px] text-[9px] text-white bg-[rgba(0,0,0,0.5)] py-[1px] px-1">
-                    {r.duration}
-                  </span>
-                </div>
+                  <div className="py-[7px] px-[9px]">
+                    <div className="text-[11px] bold text-text-primary">{r.name}</div>
+                    <div className="text-[9px] medium mt-0.5 text-brand-teal">{r.condition}</div>
+                    <p className="text-[10px] italic mt-1 leading-[1.4] text-text-secondary">{r.caption}</p>
+                  </div>
+                </a>
+              ) : (
+                <div className="block overflow-hidden rounded-[10px] bg-white border-[0.5px] border-[#E5E7EB]">
+                  <div
+                    className="relative flex items-center justify-center bg-cover bg-center aspect-[9/16]"
+                    style={{
+                      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.6) 100%), url('${r.imageUrl}')`,
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black/10" />
+                  </div>
 
-                <div className="py-[7px] px-[9px]">
-                  <div className="text-[11px] bold text-text-primary">{r.name}</div>
-                  <div className="text-[9px] medium mt-0.5 text-brand-teal">{r.condition}</div>
-                  <p className="text-[10px] italic mt-1 leading-[1.4] text-text-secondary">{r.caption}</p>
+                  <div className="py-[7px] px-[9px]">
+                    <div className="text-[11px] bold text-text-primary">{r.name}</div>
+                    <div className="text-[9px] medium mt-0.5 text-brand-teal">{r.condition}</div>
+                    <p className="text-[10px] italic mt-1 leading-[1.4] text-text-secondary">{r.caption}</p>
+                  </div>
                 </div>
-              </a>
+              )}
             </SwiperSlide>
           ))}
         </Swiper>
