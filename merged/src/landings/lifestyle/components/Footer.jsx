@@ -28,17 +28,17 @@ export default function Footer() {
             <h4 className="text-primary text-lg mb-5 font-medium">الشركة</h4>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-white/80 hover:text-primary transition text-[14px]">
+                <a href="https://salahseleemteam.com/about" className="text-white/80 hover:text-primary transition text-[14px]">
                   من نحن
                 </a>
               </li>
               <li>
-                <a href="#" className="text-white/80 hover:text-primary transition text-[14px]">
+                <a href="https://salahseleemteam.com/privacy-policy" className="text-white/80 hover:text-primary transition text-[14px]">
                   سياسة الخصوصية
                 </a>
               </li>
               <li>
-                <a href="#" className="text-white/80 hover:text-primary transition text-[14px]">
+                <a href="https://salahseleemteam.com/terms-and-conditions" className="text-white/80 hover:text-primary transition text-[14px]">
                   الشروط والأحكام
                 </a>
               </li>
@@ -93,7 +93,7 @@ export default function Footer() {
         <div className="border-t border-white/10 mt-12 pt-6 text-center md:text-center">
           <p className="text-white/60 text-[13px]">
             تم التصميم والتطوير بواسطة{" "}
-            <a href="#" className="text-primary hover:underline font-semibold">
+            <a href="https://codebase-tech.com/" className="text-primary hover:underline font-semibold">
               Codebase-tech.com
             </a>
           </p>
