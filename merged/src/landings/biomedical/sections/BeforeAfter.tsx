@@ -8,7 +8,7 @@ import { useLandingData } from "@/context/LandingDataContext";
 import "swiper/css";
 import "swiper/css/navigation";
 
-const DESKTOP_SLIDES = 5;
+const DESKTOP_SLIDES = 4;
 const DESKTOP_BREAKPOINT = 1024;
 
 type Card = {
@@ -19,6 +19,7 @@ type Card = {
   condition: string;
   imageBefore?: string;
   imageAfter?: string;
+  target?: string;
 };
 
 const ImagePlaceholder = memo(function ImagePlaceholder({
@@ -47,20 +48,35 @@ const ImagePlaceholder = memo(function ImagePlaceholder({
 
 const CardSlide = memo(function CardSlide({ c }: { c: Card }) {
   return (
-    <article className="overflow-hidden rounded-xl bg-white border-[0.5px] border-[#E5E7EB]">
-      <div className="grid grid-cols-2 gap-px bg-gray-200">
-        <ImagePlaceholder label="بعد" />
-        <ImagePlaceholder label="قبل" />
+    <article className="w-full overflow-hidden rounded-xl bg-white border-[0.5px] border-[#E5E7EB]">
+      <div className="grid grid-cols-2 gap-px bg-gray-200 relative">
+        {c.imageBefore ? (
+          <div className="relative aspect-[3/4] overflow-hidden bg-[#F0F0EE]">
+            <img src={c.imageBefore} alt={`قبل ${c.name}`} className="w-full h-full object-cover" loading="lazy" />
+            <span className="absolute top-1.5 right-1.5 rounded px-2 py-1 text-xs bold bg-black/70 text-white">قبل</span>
+          </div>
+        ) : (
+          <ImagePlaceholder label="قبل" />
+        )}
+        {c.imageAfter ? (
+          <div className="relative aspect-[3/4] overflow-hidden bg-[#F0F0EE]">
+            <img src={c.imageAfter} alt={`بعد ${c.name}`} className="w-full h-full object-cover" loading="lazy" />
+            <span className="absolute top-1.5 left-1.5 rounded px-2 py-1 text-xs bold bg-[#47706C] text-white">بعد</span>
+          </div>
+        ) : (
+          <ImagePlaceholder label="بعد" />
+        )}
+        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-white/70 z-10" />
       </div>
-      <div className="p-2.5">
-        <div className="text-[13px] font-extrabold text-[#E63312]">
+      <div className="p-4">
+        <div className="text-base font-extrabold text-[#E63312]">
           {c.result}
         </div>
-        <div className="text-[10px] mt-0.5 text-gray-400">
-          {c.name} — {c.age} — {c.duration}
+        <div className="text-sm mt-1 text-gray-400">
+          {c.name} 
         </div>
         <span className="inline-block mt-1.5 rounded-lg px-1.5 py-0.5 text-[9px] font-semibold bg-[#47706C1A] text-[#47706C]">
-          {c.condition}
+          {c.target}
         </span>
       </div>
     </article>
@@ -82,17 +98,17 @@ const DesktopSwiper = memo(function DesktopSwiper({
   return (
     <Swiper
       modules={modules}
-      spaceBetween={10}
+      spaceBetween={16}
       loop={needsSlider}
       centeredSlides={true}
       autoplay={
         needsSlider ? { delay: 2500, disableOnInteraction: true } : false
       }
       breakpoints={{
-        0: { slidesPerView: 1.4 },
-        480: { slidesPerView: 2 },
-        640: { slidesPerView: 3 },
-        768: { slidesPerView: 4 },
+        0: { slidesPerView: 1.15 },
+        480: { slidesPerView: 1.5 },
+        640: { slidesPerView: 2 },
+        768: { slidesPerView: 2.3 },
         [DESKTOP_BREAKPOINT]: {
           slidesPerView: DESKTOP_SLIDES,
           centeredSlides: !needsSlider,
@@ -111,7 +127,7 @@ const DesktopSwiper = memo(function DesktopSwiper({
 export const BeforeAfter = memo(function BeforeAfter() {
   const apiData = useLandingData();
   const beforeAfterCards = useMemo(() => {
-    const transformations = apiData?.highlighted_transformations;
+    const transformations = apiData?.transformationHeros;
     if (!transformations?.length) return staticCards;
     return transformations.map((t: any) => ({
       result: t.target || t.final_result || "",
@@ -121,6 +137,7 @@ export const BeforeAfter = memo(function BeforeAfter() {
       condition: t.type?.[0] || "",
       imageBefore: t.image_before || "",
       imageAfter: t.image_after || "",
+      target: t.target || "",
     }));
   }, [apiData]);
 
@@ -129,13 +146,13 @@ export const BeforeAfter = memo(function BeforeAfter() {
       className="bg-white px-5 py-8"
       aria-labelledby="beforeafter-heading"
     >
-      <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
+        <div className="mx-auto w-full max-w-[580px] md:max-w-[820px] lg:max-w-[1060px] xl:max-w-[1280px]">
         <p className="text-center text-[34px] md:text-[46px] bold text-text-primary leading-[1.25] tracking-tight mb-2" id="beforeafter-heading">
-          النتايج الحقيقية
+         {apiData?.general_data[1]?.transformation_title || "تحولات عملائنا"}
         </p>
-        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-text-secondary mb-6 tracking-normal">أرقام — مش وعود</h2>
+        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-text-secondary mb-6 tracking-normal">{apiData?.general_data[1]?.transformation_subtitle || "أرقام — مش وعود"}</h2>
         <p className="text-[14px] mb-4 text-center text-gray-500">
-          كل تحول فيه اسم العميل، سنه، حالته الطبية، والنتيجة بالأرقام.
+          {apiData?.general_data[1]?.transformation_subtitle_2  || ""}
         </p>
 
         <DesktopSwiper items={beforeAfterCards} />

@@ -270,9 +270,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-10 text-white/85 text-[15px] leading-[1.9] max-w-md"
           >
-{apiData?.general_data[0]?.hero_description_trans || "مع متابعة يومية من فريق طبي ورياضي متكامل غيّر حياة الآلاف للأحسن في أكثر من"}            
-            <span className="bold"> 77 </span>
-            {apiData?.general_data[0]?.hero_title_trans || " دولة ببرامج مُصممة بالمتاح ليك من وقت وامكانيات"}
+            {apiData?.general_data[0]?.description || "هتتعلم إزاي تظبط أكلك، تمارينك، ونومك عشان توصل لهدفك بأسرع وقت ممكن وبأقل مجهود"}
           </motion.p>
 
             {/* CTA → scrolls to #join */}
@@ -383,7 +381,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="bold text-white leading-[1.3] text-5xl xl:text-6xl"
             >
-              هتوصل للفورمة في 90 يوم بس من غير مكملات وبأكل عادي من البيت
+              {apiData?.general_data[0]?.title ||" هتوصل للفورمة في 90 يوم بس من غير مكملات وبأكل عادي من البيت"}
             </motion.h1>
 
             <motion.p
@@ -391,10 +389,9 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-6 text-lg xl:text-xl text-white/95 leading-[1.9]"
-            >
-              مع متابعة يومية من فريق طبي ورياضي متكامل غيّر حياة الآلاف للأحسن في أكثر من
-              <span className="bold"> 77 دولة </span>
-              ببرامج مُصممة بالمتاح ليك من وقت وإمكانيات
+            >  
+                      {apiData?.general_data[0]?.description || "هتتعلم إزاي تظبط أكلك، تمارينك، ونومك عشان توصل لهدفك بأسرع وقت ممكن وبأقل مجهود"}
+
             </motion.p>
 
             <motion.div
@@ -407,7 +404,7 @@ export default function Hero() {
                 href="#join"
                 className="inline-flex items-center justify-center bg-white text-dark bold text-xl px-10 py-4 rounded-full shadow-card hover:scale-[1.03] active:scale-[0.98] transition"
               >
-                يلا نعمل فورمة
+               {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
               </a>
             </motion.div>
           </div>

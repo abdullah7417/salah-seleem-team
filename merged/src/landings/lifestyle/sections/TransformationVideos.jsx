@@ -10,14 +10,6 @@ import { useFancybox } from "@/hooks/useFancybox";
 
 const FANCYBOX_SELECTOR = "[data-fancybox='transformation-videos']";
 
-function getYouTubeId(url) {
-  if (!url) return null;
-  const m = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-  );
-  return m ? m[1] : null;
-}
-
 function handleThumbError(e) {
   const img = e.currentTarget;
   const fallback = img.dataset.fallback;
@@ -34,32 +26,28 @@ export default function TransformationVideos() {
     animated: true,
     dragToClose: true,
     closeButton: true,
-    Youtube: { autoplay: 1 },
   });
 
-  const videoThumbs = useMemo(() => {
-    const enrich = (item) => {
-      const videoId = getYouTubeId(item.youtubeUrl);
-      return {
-        ...item,
-        thumbnail: videoId
-          ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-          : null,
-      };
-    };
-
-    const ht = apiData?.highlighted_transformations;
-    if (!ht?.length) return staticThumbs.map(enrich);
-    return ht.map((t, i) => {
-      const staticFallback = staticThumbs[i % staticThumbs.length];
-      const youtubeUrl =
-        t.video_url || t.youtube_url || staticFallback?.youtubeUrl || "";
-      return enrich({
-        id: t.id || i + 1,
-        image: t.image_after || t.image_before || staticFallback?.image || "",
-        youtubeUrl,
-      });
-    });
+  const videoItems = useMemo(() => {
+    const videos = apiData?.videos[0];
+    if (!videos?.length) {
+      return staticThumbs.map((s, i) => ({
+        id: s.id || i + 1,
+        thumbnail: null,
+        imageUrl: s.image || "",
+        url: s.youtubeUrl || "",
+        title: "",
+        hasUrl: !!s.youtubeUrl,
+      }));
+    }
+    return videos.map((v, i) => ({
+      id: v.id || i + 1,
+      thumbnail: v.thumbnail || null,
+      imageUrl: v.image_url || "",
+      url: v.url || "",
+      title: v.title || v.description || "",
+      hasUrl: !!v.url,
+    }));
   }, [apiData]);
 
   return (
@@ -89,27 +77,40 @@ export default function TransformationVideos() {
             1280: { slidesPerView: 4, spaceBetween: 15 },
           }}
         >
-          {videoThumbs.map((v) => (
+          {videoItems.map((v) => (
             <SwiperSlide key={v.id}>
-              <a
-                href={v.youtubeUrl}
-                data-fancybox="transformation-videos"
-                aria-label="شغّل فيديو التحول"
-                className="relative block w-full aspect-[9/14] rounded-2xl overflow-hidden group shadow-card cursor-pointer"
-              >
-                <img
-                  src={v.thumbnail || v.image}
-                  data-fallback={v.image}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                  onError={handleThumbError}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent" />
-                <span className="absolute inset-0 m-auto w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/95 grid place-items-center shadow-glow group-hover:scale-110 transition">
-                  <FaPlay className="w-5 h-5 md:w-6 md:h-6 text-primary translate-x-0.5" />
-                </span>
-              </a>
+              {v.hasUrl ? (
+                <a
+                  href={v.url}
+                  data-fancybox="transformation-videos"
+                  aria-label={v.title || "شغّل فيديو التحول"}
+                  className="relative block w-full aspect-[9/14] rounded-2xl overflow-hidden group shadow-card cursor-pointer"
+                >
+                  <img
+                    src={v.thumbnail || v.imageUrl}
+                    data-fallback={v.imageUrl}
+                    alt={v.title}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    onError={handleThumbError}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent" />
+                  <span className="absolute inset-0 m-auto w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/95 grid place-items-center shadow-glow group-hover:scale-110 transition">
+                    <FaPlay className="w-5 h-5 md:w-6 md:h-6 text-primary translate-x-0.5" />
+                  </span>
+                </a>
+              ) : (
+                <div className="relative block w-full aspect-[9/14] rounded-2xl overflow-hidden shadow-card">
+                  <img
+                    src={v.imageUrl}
+                    alt={v.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                    onError={handleThumbError}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-dark/60 via-transparent to-transparent" />
+                </div>
+              )}
             </SwiperSlide>
           ))}
         </Swiper>
