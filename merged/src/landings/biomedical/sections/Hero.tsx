@@ -240,7 +240,7 @@ export function Hero() {
                 {apiData?.general_data[0]?.hero_badge || "أول فريق طبي رياضي في مصر هيساعدك تعمل فورمة بسهولة"}
               </span>
 
-              <h1 className="text-white text-[38px] md:text-[48px] xl:text-[60px] bold leading-[60px]">
+              <h1 className="text-white text-[36px] md:text-[42px] xl:text-[52px] bold leading-[60px]">
                 {apiData?.general_data[0]?.title || "لسه شايف إن الإصابة أو المرض سبب علشان توقف حياتك ومتوصلش للفورمة؟"}
               </h1>
 
@@ -317,7 +317,7 @@ export function Hero() {
           </div>
 
           <div className="relative z-[2] px-16 pb-10 max-w-[1200px] mx-auto w-full">
-            <div className="w-full h-px bg-[rgba(255,255,255,0.1)] mb-8" />
+            {/* <div className="w-full h-px bg-[rgba(255,255,255,0.1)] mb-8" /> */}
             {/* <ReviewCard r={r} visible={visible} idx={idx} goTo={goTo} /> */}
           </div>
         </>

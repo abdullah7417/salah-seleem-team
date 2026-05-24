@@ -14,7 +14,7 @@ export const HowItWorks = memo(function HowItWorks() {
     const programs = apiData?.programs;
     if (!programs?.length) return staticTeam;
     return programs.map((p: any, i: number) => ({
-      icon: ["🧑‍⚕️", "🥗", "💪", "🎯"][i % 4],
+      icon: ["🧑", "🥗", "💪", "🎯"][i % 4],
       title: p.title,
       body: p.description,
     }));
@@ -23,9 +23,9 @@ export const HowItWorks = memo(function HowItWorks() {
     <section className="bg-brand-dark px-5 py-10" aria-labelledby="howitworks-heading">
       <div className="mx-auto w-full max-w-[480px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1140px]">
         <p className="text-center text-[34px] md:text-[46px] bold text-[rgba(255,255,255,0.5)] leading-[1.25] tracking-tight mb-2" id="howitworks-heading">
-          ايه اللي بيحصل بعد الاشتراك بالخطوات؟
+          {apiData?.general_data[1]?.journey_title || "ايه اللي بيحصل بعد الاشتراك بالخطوات؟"}
         </p>
-        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-white tracking-normal">من أول يوم لحد ما تعمل فورمة</h2>
+        <h2 className="text-center text-base md:text-xl medium leading-[1.5] text-white tracking-normal">{apiData?.general_data[1]?.journey_subtitle || "من أول يوم لحد ما تعمل فورمة"}</h2>
 
         <ol className="mt-2">
           {howItWorksSteps.map((s: any, i: number) => (
@@ -52,7 +52,7 @@ export const HowItWorks = memo(function HowItWorks() {
           ))}
         </ol>
 
-        <h2 className="text-center text-base md:text-xl font-semibold leading-[1.5] text-white tracking-normal mt-8">مين اللي بيتابع معاك على الواتس-آب كل يوم؟</h2>
+        <h2 className="text-center text-base md:text-xl font-semibold leading-[1.5] text-white tracking-normal mt-8">{apiData?.general_data[1]?.programs_title || "مين اللي بيتابع معاك على الواتس-آب كل يوم؟"}</h2>
         <div className="mt-4 grid grid-cols-2 gap-2.5">
           {teamMembers.map((t: any, i: number) => (
             <div
