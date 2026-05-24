@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useEffect, memo } from "react";
 import { cn } from "@/lib/utils";
 import { pricingOptions as staticOptions, pricingFeatures as staticFeatures, medicalTags as staticTags } from "../data";
 import { useLandingData } from "@/context/LandingDataContext";
+import { siteBaseUrl } from "@/config/site";
 
 const FALLBACK_PLANS = [
   {
@@ -67,7 +68,7 @@ export const Pricing = memo(function Pricing() {
     (plan: any) => {
       const membership = getSelectedMembership(plan);
       if (!membership) return;
-      window.location.href = `https://salahseleemteam.com/membership/membership/payment/plans/${plan.id}/${membership.id}`;
+      window.location.href = `${siteBaseUrl}/membership/membership/payment/plans/${plan.id}/${membership.id}`;
     },
     [getSelectedMembership]
   );

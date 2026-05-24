@@ -1,5 +1,6 @@
 import { FaFacebookF, FaInstagram, FaYoutube, FaTiktok, FaWhatsapp } from "react-icons/fa";
 import logo from "@/assets/logo-new.svg";
+import { siteBaseUrl } from "@/config/site";
 
 /**
  * Footer — dark style matching the reference screenshot:
@@ -28,17 +29,17 @@ export default function Footer() {
             <h4 className="text-primary text-lg mb-5 font-medium">الشركة</h4>
             <ul className="space-y-3">
               <li>
-                <a href="https://salahseleemteam.com/about" className="text-white/80 hover:text-primary transition text-[14px]">
+                <a href={`${siteBaseUrl}/about`} className="text-white/80 hover:text-primary transition text-[14px]">
                   من نحن
                 </a>
               </li>
               <li>
-                <a href="https://salahseleemteam.com/privacy-policy" className="text-white/80 hover:text-primary transition text-[14px]">
+                <a href={`${siteBaseUrl}/privacy-policy`} className="text-white/80 hover:text-primary transition text-[14px]">
                   سياسة الخصوصية
                 </a>
               </li>
               <li>
-                <a href="https://salahseleemteam.com/terms-and-conditions" className="text-white/80 hover:text-primary transition text-[14px]">
+                <a href={`${siteBaseUrl}/terms-and-conditions`} className="text-white/80 hover:text-primary transition text-[14px]">
                   الشروط والأحكام
                 </a>
               </li>

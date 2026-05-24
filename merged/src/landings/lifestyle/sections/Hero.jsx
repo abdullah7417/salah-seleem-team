@@ -1,34 +1,16 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
-import { FaPlay, FaPause } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 import { cn } from "@/lib/utils";
-import { useFancybox } from "@/hooks/useFancybox";
-import coachHero from "@/assets/coach-hero.jpg";
 import { useLandingData } from "@/context/LandingDataContext";
+import {
+  parseVideoUrl,
+  useVideoThumbnail,
+  getEmbedUrl,
+} from "@/lib/videoUtils";
+import { VideoPlayButton } from "@/components/VideoPlayButton";
+import { VideoPlayerModal } from "@/components/VideoPlayerModal";
 
-
-const YOUTUBE_VIDEO_ID = "5nz32pPBq8w";
-const YOUTUBE_URL = `https://www.youtube.com/watch?v=${YOUTUBE_VIDEO_ID}`;
-const YOUTUBE_THUMBNAIL = `https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`;
-const YOUTUBE_THUMBNAIL_SD = `https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/hqdefault.jpg`;
-
-const FANCYBOX_SELECTOR = "[data-fancybox='hero-video-mobile']";
-
-/**
- * Thumbnail fallback chain: maxresdefault → hqdefault → coachHero
- */
-function handleThumbnailError(e) {
-  const img = e.currentTarget;
-  if (img.src.includes("maxresdefault")) {
-    img.src = YOUTUBE_THUMBNAIL_SD;
-  } else {
-    img.src = coachHero;
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/*  SST Logo SVG (shared by mobile & desktop to keep markup DRY)      */
-/* ------------------------------------------------------------------ */
 function SstLogo() {
   return (
    <svg width="207" height="53" viewBox="0 0 120 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,188 +22,96 @@ function SstLogo() {
   );
 }
 
-/**
- * Lifestyle Hero section with advanced responsive video behavior.
- *
- * Desktop (lg+):
- *  - YouTube thumbnail poster with animated play button.
- *  - Click → inline YouTube playback via IFrame API (no modal).
- *  - Click again → pause; click again → resume.
- *  - YouTube IFrame API loaded on-demand only on first play.
- *
- * Mobile/Tablet (<lg):
- *  - YouTube thumbnail as full-screen background.
- *  - White pill CTA opens Fancybox modal with YouTube video.
- *  - Additional CTA button scrolls to #join.
- *  - Fancybox lazy-loaded via IntersectionObserver.
- */
 export default function Hero() {
-  /* ---- Desktop video state: 'idle' | 'playing' | 'paused' ---- */
-  const [desktopVideoState, setDesktopVideoState] = useState("idle");
-  const desktopPlayerContainerRef = useRef(null);
-  const ytPlayerRef = useRef(null);
-  const isTransitioningRef = useRef(false);
-  const ytApiLoadingRef = useRef(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [desktopVideoPlaying, setDesktopVideoPlaying] = useState(false);
 
-  /* ---- Mobile Fancybox (lazy-loaded via IntersectionObserver) ---- */
-  const { ref: fancyboxRef } = useFancybox(FANCYBOX_SELECTOR, {
-    Toolbar: false,
-    animated: true,
-    dragToClose: true,
-    closeButton: true,
-    Youtube: { autoplay: 1 },
-  });
-  const fancyboxAnchorRef = useRef(null);
-
-  /* ---- Load YouTube IFrame API (idempotent, returns cached promise) ---- */
-  const loadYtApi = useCallback(() => {
-    if (ytApiLoadingRef.current) return ytApiLoadingRef.current;
-    if (window.YT?.Player) return Promise.resolve();
-
-    const promise = new Promise((resolve) => {
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      const prev = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = () => {
-        prev?.();
-        resolve();
-      };
-      document.head.appendChild(tag);
-    });
-
-    ytApiLoadingRef.current = promise;
-    return promise;
-  }, []);
-
-  /* ---- Create / toggle YT Player when desktopVideoState changes ---- */
-  useEffect(() => {
-    if (desktopVideoState === "idle") {
-      if (ytPlayerRef.current) {
-        ytPlayerRef.current.destroy();
-        ytPlayerRef.current = null;
-      }
-      if (desktopPlayerContainerRef.current) {
-        desktopPlayerContainerRef.current.innerHTML = "";
-      }
-      return;
-    }
-
-    if (ytPlayerRef.current) {
-      if (desktopVideoState === "playing") {
-        ytPlayerRef.current.playVideo();
-      } else {
-        ytPlayerRef.current.pauseVideo();
-      }
-      return;
-    }
-
-    loadYtApi().then(() => {
-      const container = desktopPlayerContainerRef.current;
-      if (!container) return;
-
-      const playerDiv = document.createElement("div");
-      playerDiv.id = "yt-hero-desktop";
-      container.innerHTML = "";
-      container.appendChild(playerDiv);
-
-      ytPlayerRef.current = new window.YT.Player("yt-hero-desktop", {
-        videoId: YOUTUBE_VIDEO_ID,
-        width: "100%",
-        height: "100%",
-        playerVars: {
-          autoplay: 1,
-          rel: 0,
-          modestbranding: 1,
-        },
-        events: {
-          onStateChange: (event) => {
-            if (event.data === window.YT.PlayerState.ENDED) {
-              setDesktopVideoState("idle");
-            }
-          },
-        },
-      });
-    });
-
-    const timer = setTimeout(() => {
-      isTransitioningRef.current = false;
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [desktopVideoState, loadYtApi]);
-
-  /* ---- Desktop click handler ---- */
-  const handleDesktopClick = useCallback(() => {
-    if (isTransitioningRef.current) return;
-
-    if (desktopVideoState === "idle") {
-      isTransitioningRef.current = true;
-      setDesktopVideoState("playing");
-    } else if (desktopVideoState === "playing") {
-      setDesktopVideoState("paused");
-    } else {
-      setDesktopVideoState("playing");
-    }
-  }, [desktopVideoState]);
-
-  const handleDesktopKeyDown = useCallback(
-    (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleDesktopClick();
-      }
-    },
-    [handleDesktopClick],
-  );
-
-  /* ---- Mobile Fancybox trigger ---- */
-  const handleMobilePlay = useCallback(() => {
-    fancyboxAnchorRef.current?.click();
-  }, []);
-
-  /* ---- Cleanup on unmount ---- */
-  useEffect(() => {
-    return () => {
-      ytPlayerRef.current?.destroy?.();
-      ytPlayerRef.current = null;
-    };
-  }, []);
   const apiData = useLandingData();
 
-  return (
-    <section id="top" ref={fancyboxRef} className="relative bg-dark">
-      {/* Hidden anchor for Fancybox (mobile/tablet only) */}
-      <a
-        ref={fancyboxAnchorRef}
-        href={YOUTUBE_URL}
-        data-fancybox="hero-video-mobile"
-        className="hidden"
-        aria-hidden="true"
-        tabIndex={-1}
-      >
-        &nbsp;
-      </a>
+  const videoUrl = apiData?.general_data?.[0]?.hero_video || null;
+  const videoInfo = useMemo(() => parseVideoUrl(videoUrl), [videoUrl]);
+  const { src: thumbnailSrc } = useVideoThumbnail(videoUrl);
+  const hasVideo = !!videoUrl && !!videoInfo;
 
-      {/* ========== MOBILE / TABLET LAYOUT (<lg) ==========
-           - Muted autoplay YouTube video as full-screen background
-           - YouTube thumbnail as poster fallback while video loads
-           - Dark overlay for text readability
-           - White pill CTA triggers Fancybox modal (with sound)
-           - Additional CTA scrolls to #join
-      */}
-      <div className="lg:hidden relative min-h-screen w-full overflow-hidden">
-        {/* Background video — muted autoplay, no controls, loops */}
+  const hero = apiData?.general_data?.[0];
+  const videoBtnText = hero?.hero_video_btn || "اعرف ازاي هتوصل للفورمة في 90 يوم";
+
+  const handleOpenModal = useCallback(() => setModalOpen(true), []);
+  const handleCloseModal = useCallback(() => setModalOpen(false), []);
+  const handleDesktopPlay = useCallback(() => setDesktopVideoPlaying(true), []);
+
+  const renderMobileBackground = () => {
+    if (!hasVideo) return null;
+
+    if (videoInfo.platform === "youtube" || videoInfo.platform === "vimeo") {
+      const embedSrc = getEmbedUrl(videoInfo.platform, videoInfo.id, "background");
+      return (
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           <iframe
-            src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=${YOUTUBE_VIDEO_ID}&playsinline=1`}
+            src={embedSrc}
             title="فيديو الخلفية"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             className="absolute top-1/2 left-1/2 w-[177.78vh] min-w-full h-[56.25vw] min-h-full -translate-x-1/2 -translate-y-1/2 border-none opacity-30"
           />
         </div>
+      );
+    }
+
+    if (videoInfo.platform === "mp4") {
+      return (
+        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            src={videoInfo.id}
+            className="absolute top-1/2 left-1/2 min-w-full min-h-full -translate-x-1/2 -translate-y-1/2 object-cover opacity-30"
+          />
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const renderDesktopInlinePlayer = () => {
+    if (!hasVideo) return null;
+
+    if (videoInfo.platform === "youtube" || videoInfo.platform === "vimeo") {
+      const embedSrc = getEmbedUrl(videoInfo.platform, videoInfo.id, "desktop");
+      return (
+        <iframe
+          src={embedSrc}
+          title="فيديو تحولات SST"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full border-none block"
+        />
+      );
+    }
+
+    if (videoInfo.platform === "mp4") {
+      return (
+        <video
+          src={videoInfo.id}
+          controls
+          autoPlay
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <section id="top" className="relative bg-dark">
+      <div className="lg:hidden relative min-h-screen w-full overflow-hidden">
+        {renderMobileBackground()}
         <div className="absolute inset-0 bg-black/60" />
 
         <div className="relative z-10 flex flex-col items-center text-center px-6 pt-16 pb-14 min-h-screen">
-          {/* SST logo */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -231,7 +121,6 @@ export default function Hero() {
             <SstLogo />
           </motion.div>
 
-          {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -242,28 +131,24 @@ export default function Hero() {
             عادي من البيت
           </motion.h1>
 
-          {/* White pill CTA → opens Fancybox modal */}
-          <motion.button
-            type="button"
-            onClick={handleMobilePlay}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-10 inline-flex items-center gap-3 bg-white rounded-full px-5 py-2 shadow-card hover:scale-[1.03] active:scale-[0.98] transition cursor-pointer"
-          >
-            <span className="w-12 h-12 rounded-full border-2 border-primary grid place-items-center bg-white">
-              <FaPlay className="w-4 h-4 text-primary translate-x-0.5" />
-            </span>
-            <span className="text-primary font-extrabold text-[15px] leading-tight text-right">
-              اعرف ازاي هتوصل
-              <br />
-              للفورمة في 90 يوم
-            </span>
-          </motion.button>
+          {hasVideo && (
+            <motion.button
+              type="button"
+              onClick={handleOpenModal}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-10 inline-flex items-center gap-3 bg-white rounded-full px-5 py-2 shadow-card hover:scale-[1.03] active:scale-[0.98] transition cursor-pointer"
+            >
+              <span className="w-12 h-12 rounded-full border-2 border-primary grid place-items-center bg-white">
+                <FaPlay className="w-4 h-4 text-primary translate-x-0.5" />
+              </span>
+              <span className="text-primary font-extrabold text-[15px] leading-tight text-right">
+                {videoBtnText}
+              </span>
+            </motion.button>
+          )}
 
-        
-
-          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -273,94 +158,53 @@ export default function Hero() {
             {apiData?.general_data[0]?.description || "هتتعلم إزاي تظبط أكلك، تمارينك، ونومك عشان توصل لهدفك بأسرع وقت ممكن وبأقل مجهود"}
           </motion.p>
 
-            {/* CTA → scrolls to #join */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
             className="mt-6"
           >
-           <a href="#join" className="inline-flex items-center justify-center bg-primary text-white bold text-lg md:text-xl px-10 py-4 rounded-full shadow-glow hover:bg-primary-deep transition">
-             {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
-           </a>
+            <a href="#join" className="inline-flex items-center justify-center bg-primary text-white bold text-lg md:text-xl px-10 py-4 rounded-full shadow-glow hover:bg-primary-deep transition">
+              {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
+            </a>
           </motion.div>
         </div>
       </div>
 
-      {/* ========== DESKTOP LAYOUT (lg+) ==========
-           - Two-column: orange content panel (left) + video column (right)
-           - Video: poster thumbnail → inline play via YouTube IFrame API
-           - Click to play, click again to pause, click to resume
-           - No modal / Fancybox on desktop
-      */}
       <div className="hidden lg:grid lg:grid-cols-2 lg:min-h-[760px]">
-        {/* Video column */}
         <div className="relative order-2 bg-dark overflow-hidden">
-          {/* Poster thumbnail (fades out when video plays) */}
-          <img
-            src={YOUTUBE_THUMBNAIL}
-            alt="كوتش تحدي الـ 90 يوم"
-            onError={handleThumbnailError}
-            className={cn(
-              "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
-              desktopVideoState !== "idle" && "opacity-0",
-            )}
-          />
-          <div
-            className={cn(
-              "absolute inset-0 bg-black/20 transition-opacity duration-700",
-              desktopVideoState !== "idle" && "opacity-0",
-            )}
-          />
-
-          {/* YT Player container — iframe injected by YouTube IFrame API */}
-          <div
-            ref={desktopPlayerContainerRef}
-            className={cn(
-              "absolute inset-0 transition-opacity duration-700 [&_iframe]:absolute [&_iframe]:inset-0 [&_iframe]:w-full [&_iframe]:h-full [&_iframe]:border-none",
-              desktopVideoState === "idle" && "opacity-0 pointer-events-none",
-            )}
-          />
-
-          {/* Play button overlay (visible in idle / paused) */}
-          {desktopVideoState !== "playing" && (
-            <motion.button
-              key="play-btn"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{
-                delay: desktopVideoState === "idle" ? 0.4 : 0,
-                type: "spring",
-              }}
-              aria-label="شغّل الفيديو"
-              type="button"
-              onClick={handleDesktopClick}
-              onKeyDown={handleDesktopKeyDown}
-              className="absolute inset-0 m-auto w-24 h-24 rounded-full bg-white grid place-items-center shadow-glow animate-pulse-ring hover:scale-110 transition z-10 cursor-pointer"
-            >
-              <FaPlay className="w-8 h-8 text-primary translate-x-0.5" />
-            </motion.button>
-          )}
-
-          {/* Pause overlay when playing — semi-transparent, visible on hover */}
-          {desktopVideoState === "playing" && (
+          {hasVideo && desktopVideoPlaying ? (
+            renderDesktopInlinePlayer()
+          ) : hasVideo ? (
             <div
-              className="absolute inset-0 z-10 cursor-pointer group"
-              onClick={handleDesktopClick}
+              className="absolute inset-0 cursor-pointer"
+              onClick={handleDesktopPlay}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleDesktopPlay(); }}
               role="button"
               tabIndex={0}
-              onKeyDown={handleDesktopKeyDown}
-              aria-label="إيقاف الفيديو مؤقتاً"
+              aria-label={videoBtnText}
             >
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-              <div className="absolute inset-0 m-auto w-20 h-20 rounded-full bg-white/0 group-hover:bg-white/90 grid place-items-center transition-all duration-300 opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100">
-                <FaPause className="w-7 h-7 text-primary" />
+              {thumbnailSrc && (
+                <img
+                  src={thumbnailSrc}
+                  alt={videoBtnText}
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (videoInfo?.platform === "youtube" && !img.src.includes("hqdefault")) {
+                      img.src = `https://img.youtube.com/vi/${videoInfo.id}/hqdefault.jpg`;
+                    }
+                  }}
+                  className="absolute inset-0 w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+              )}
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <VideoPlayButton size="lg" onClick={handleDesktopPlay} ariaLabel={videoBtnText} />
               </div>
             </div>
-          )}
+          ) : null}
         </div>
 
-        {/* Orange content column */}
         <div className="relative order-1 bg-primary text-white flex items-center overflow-hidden">
           <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-white/10 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-40 -left-20 w-96 h-96 rounded-full bg-primary-deep/60 blur-3xl pointer-events-none" />
@@ -381,7 +225,7 @@ export default function Hero() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="bold text-white leading-[1.3] text-5xl xl:text-6xl"
             >
-              {apiData?.general_data[0]?.title ||" هتوصل للفورمة في 90 يوم بس من غير مكملات وبأكل عادي من البيت"}
+              {apiData?.general_data[0]?.title || " هتوصل للفورمة في 90 يوم بس من غير مكملات وبأكل عادي من البيت"}
             </motion.h1>
 
             <motion.p
@@ -389,9 +233,8 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mt-6 text-lg xl:text-xl text-white/95 leading-[1.9]"
-            >  
-                      {apiData?.general_data[0]?.description || "هتتعلم إزاي تظبط أكلك، تمارينك، ونومك عشان توصل لهدفك بأسرع وقت ممكن وبأقل مجهود"}
-
+            >
+              {apiData?.general_data[0]?.description || "هتتعلم إزاي تظبط أكلك، تمارينك، ونومك عشان توصل لهدفك بأسرع وقت ممكن وبأقل مجهود"}
             </motion.p>
 
             <motion.div
@@ -404,12 +247,19 @@ export default function Hero() {
                 href="#join"
                 className="inline-flex items-center justify-center bg-white text-dark bold text-xl px-10 py-4 rounded-full shadow-card hover:scale-[1.03] active:scale-[0.98] transition"
               >
-               {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
+                {apiData?.general_data[0]?.hero_btn_txt || "يلا نعمل فورمة"}
               </a>
             </motion.div>
           </div>
         </div>
       </div>
+
+      <VideoPlayerModal
+        url={videoUrl}
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+        title={videoBtnText}
+      />
     </section>
   );
 }

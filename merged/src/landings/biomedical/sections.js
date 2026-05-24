@@ -11,7 +11,7 @@ export const SECTION_MAP = {
   ctaBanner: lazy(() => import("./sections/CTABanner").then((m) => ({ default: m.CTABanner }))),
   howItWorks: lazy(() => import("./sections/HowItWorks").then((m) => ({ default: m.HowItWorks }))),
   guarantee: lazy(() => import("./sections/Guarantee").then((m) => ({ default: m.Guarantee }))),
-  pricing: lazy(() => import("./sections/Pricing").then((m) => ({ default: m.Pricing }))),
+  pricing: lazy(() => import("./sections/new-pricing").then((m) => ({ default: m.NewPricing }))),
   faq: lazy(() => import("./sections/FAQ").then((m) => ({ default: m.FAQ }))),
   stickyCta: lazy(() => import("./sections/StickyCTA").then((m) => ({ default: m.StickyCTA }))),
   finalCta: lazy(() => import("./sections/FinalCTA").then((m) => ({ default: m.FinalCTA }))),

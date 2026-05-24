@@ -22,7 +22,6 @@ export const landings = {
       "guarantee",
       "pricing",
       "faq",
-      "stickyCta",
     ],
     layout: {
       footer: false,

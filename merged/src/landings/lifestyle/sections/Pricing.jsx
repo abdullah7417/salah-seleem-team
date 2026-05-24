@@ -4,6 +4,7 @@ import { FaChevronDown, FaArrowLeft, FaCheck } from "react-icons/fa";
 import Container from "@/components/common/Container";
 import { pricingFeatures as staticFeatures, pricingPlans as staticPlans } from "../data/features";
 import { useLandingData } from "@/context/LandingDataContext";
+import { siteBaseUrl } from "@/config/site";
 
 const FALLBACK_PLANS = [
   {
@@ -148,7 +149,7 @@ export default function Pricing() {
   const handlePay = useCallback((plan) => {
     const membership = getSelectedMembership(plan);
     if (!membership) return;
-    window.location.href = `https://salahseleemteam.com/membership/membership/payment/plans/${plan.id}/${membership.id}`;
+    window.location.href = `${siteBaseUrl}/membership/membership/payment/plans/${plan.id}/${membership.id}`;
   }, [getSelectedMembership]);
 
   const validPlans = membershipPlans.filter(
